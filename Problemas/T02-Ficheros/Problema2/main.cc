@@ -13,15 +13,17 @@
  */
 
 #include <iostream>
+#include <string>
 #include <vector>
 
-void ProcessFile(const std::string& file) {
-  std::ifstream file_in(file);
-  std::ofstream file_out("salida.txt");
+int main(int argc, char* argv[]) {
+  if (argc != 2) {
+    std::cerr << "Se introdujo el número inorrecto de parametros";
+  }
+  std::ifstream in_file{argv[1]};
+  std::string line;
+  while (std::getline(in_file, line)) {
+    std::sstring(line);
+    while
+  }
 }
-
-std::vector<char> SwapCharacters(const std::vector<char> willy) {
-  int qlq = willy.size for (auto i = willy[qlq]; i > 0; i--) {}
-}
-
-int main() {}
