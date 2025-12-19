@@ -9,21 +9,16 @@
  * @brief Descripción del archivo
  */
 
-#ifndef BOOK_CLASS
-#define BOOK_CLASS
-#include <iostream>
-#include <string>
+#include "book_class.h"
 
-class books {
- public:
-  double TaxedPrice(price);
-  Book(const std::string& title, int year, double price);
-  double GetPriceWithTax(double tax) const;
+/// Metodos
+double Books::CalcTaxes(Books book, const double taxes) {
+  return book.price_ * (taxes / 100);
+}
 
- private:
-  std::string title;
-  int publish_date;
-  double price;
-};
-
-#endif
+/// Operator overloading
+std::ostream& operator<<(std::ostream& out_stream, const Books& book) {
+  out_stream << book.GetTitle() << " Se publicó en " << book.GetDate()
+             << " y vale " << book.Getprice() << ", con impuestos: ";
+  return out_stream;
+}

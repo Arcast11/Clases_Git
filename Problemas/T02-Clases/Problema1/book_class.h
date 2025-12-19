@@ -18,17 +18,26 @@
 class Books {
  public:
   Books(std::string title, int publish_date, double price)
-      : title_(title), publish_date_(publish_date), price_(price) {};
+      : title_(" "), publish_date_(0000), price_(0) {
+    title_ = title;
+    publish_date_ = publish_date;
+    price_ = price;
+  };
 
   /// Getters
   std::string GetTitle() const { return title_; }
   int GetDate() const { return publish_date_; }
+  double Getprice() const { return price_; }
 
   /// Setters
   void SetTitle(std::string title) { title_ = title; }
   void SetDate(int publish_date) { publish_date_ = publish_date; }
 
   /// Metodos
+  double CalcTaxes(Books book, double taxes);
+
+  /// Operator overloading
+  friend std::ostream& operator<<(std::ostream& out_stream, Books& book);
 
  private:
   std::string title_;
