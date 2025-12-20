@@ -6,7 +6,7 @@
  *
  * @author Armando Castro armando.castro.31@ull.edu.es
  * @date Dec 19 2025
- * @brief Descripción del archivo
+ * @brief Clase representación de libros
  */
 
 #ifndef BOOK_CLASS_H
@@ -17,17 +17,8 @@
 
 class Books {
  public:
-  Books(std::string title, int publish_date, double price)
-      : title_(" "), publish_date_(0000), price_(0) {
-    title_ = title;
-    publish_date_ = publish_date;
-    price_ = price;
-  };
-
-  /// Metodos
+  Books(std::string title, int publish_date, double price);
   double CalcTaxes(const double taxes);
-
-  /// Operator overloading
   friend std::ostream& operator<<(std::ostream& out_stream, const Books& book);
 
  private:
