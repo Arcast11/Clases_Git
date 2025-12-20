@@ -12,13 +12,13 @@
 #include "book_class.h"
 
 /// Metodos
-double Books::CalcTaxes(Books book, const double taxes) {
-  return book.price_ * (taxes / 100);
+double Books::CalcTaxes(const double taxes) {
+  return price_ * (1 + taxes / 100);
 }
 
 /// Operator overloading
 std::ostream& operator<<(std::ostream& out_stream, const Books& book) {
-  out_stream << book.GetTitle() << " Se publicó en " << book.GetDate()
-             << " y vale " << book.Getprice() << ", con impuestos: ";
+  out_stream << book.title_ << ", " << book.publish_date_ << ", "
+             << book.price_;
   return out_stream;
 }

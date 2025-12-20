@@ -24,9 +24,9 @@ int main(int argc, char* argv[]) {
   Books book2("El Lazarillo de Tormes", 1554, 18);
   Books book3("Los Pilares de la Tierra", 1989, 27);
 
-  std::cout << book1 << std::endl;
-  std::cout << book2 << std::endl;
-  std::cout << book3 << std::endl;
+  std::cout << book1 << ", " << book1.CalcTaxes(taxes) << std::endl;
+  std::cout << book2 << ", " << book2.CalcTaxes(taxes) << std::endl;
+  std::cout << book3 << ", " << book3.CalcTaxes(taxes) << std::endl;
 
   return 0;
 }

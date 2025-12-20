@@ -24,20 +24,11 @@ class Books {
     price_ = price;
   };
 
-  /// Getters
-  std::string GetTitle() const { return title_; }
-  int GetDate() const { return publish_date_; }
-  double Getprice() const { return price_; }
-
-  /// Setters
-  void SetTitle(std::string title) { title_ = title; }
-  void SetDate(int publish_date) { publish_date_ = publish_date; }
-
   /// Metodos
-  double CalcTaxes(Books book, double taxes);
+  double CalcTaxes(const double taxes);
 
   /// Operator overloading
-  friend std::ostream& operator<<(std::ostream& out_stream, Books& book);
+  friend std::ostream& operator<<(std::ostream& out_stream, const Books& book);
 
  private:
   std::string title_;
