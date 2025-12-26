@@ -12,6 +12,9 @@
  * @see
  */
 
+#ifndef SHAPE_H
+#define SHAPE_H
+
 #include <iostream>
 #include <string>
 
@@ -21,8 +24,8 @@ class Shape {
  public:
   Shape(std::string graph, double area) : graph_{graph}, area_{area} {}
   double GetArea() const { return area_; }
-  friend std::ostream& operator<<(std::ostream&, const Shape&);
-  bool operator<(const Shape&);
+  friend std::ostream& operator<<(std::ostream& out_stream, const Shape& shape);
+  bool operator<(const Shape& Shape) const;
 
  private:
   double area_;
@@ -47,3 +50,5 @@ class Circle : public Shape {
  public:
   Circle(double radius = 1.0) : Shape{"()", kpi * radius * radius} {}
 };
+
+#endif

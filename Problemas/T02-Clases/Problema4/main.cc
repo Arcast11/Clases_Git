@@ -15,7 +15,7 @@
 #include <iostream>
 #include <vector>
 
-#include "shape.cc"
+#include "shape.h"
 
 int main() {
   std::vector<Shape> shapes{Square{1.0}, Circle{0.5}, Triangle{1.0, 1.0},
@@ -24,5 +24,6 @@ int main() {
   for (const auto& shape : shapes) {
     std::cout << shape << ' ';
   }
+  std::cout << std::endl;
   return 0;
 }

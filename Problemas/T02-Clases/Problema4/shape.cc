@@ -18,7 +18,7 @@
  *  @param Shape : forma que va a comparar
  *  @return bool (true o false)
  */
-bool Shape::operator<(const Shape& shape) {
+bool Shape::operator<(const Shape& shape) const {
   if (area_ < shape.area_) {
     return true;
   }
@@ -30,6 +30,6 @@ bool Shape::operator<(const Shape& shape) {
  *  @return out_stream : flujo de salida
  */
 std::ostream& operator<<(std::ostream& out_stream, const Shape& shape) {
-  out_stream << shape.graph_ << shape.area_;
+  out_stream << shape.graph_ << "(" << shape.area_ << ")";
   return out_stream;
 }
