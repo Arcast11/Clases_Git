@@ -9,6 +9,9 @@
  * @brief Descripción del archivo
  */
 
+#ifndef REY_H
+#define REY_H
+
 #include <iostream>
 #include <string>
 
@@ -23,8 +26,8 @@ class Rey {
 
   /// Atributos de asignación (Setters)
   void SetNombre(const std::string& nombre) { nombre_ = nombre; }
-  void GetInicio(int inicio) { inicio_ = inicio; }
-  void GetFinal(int final) { final_ = final; }
+  void SetInicio(int inicio) { inicio_ = inicio; }
+  void SetFinal(int final) { final_ = final; }
 
   int DuracionReinado() const;
 
@@ -33,7 +36,10 @@ class Rey {
   int inicio_;
   int final_;
 };
+
 /// sobrecarga de operadores
-bool operador < (const Rey& rey1, const Rey& rey2);
-std::ostream operator<<(std::ostream& out_stream, const Rey& rey);
-std::istream operator>>(std::istream& in_stream, Rey& rey);
+bool operator<(const Rey& rey1, const Rey& rey2);
+std::ostream& operator<<(std::ostream& out_stream, const Rey& rey);
+std::istream& operator>>(std::istream& in_stream, Rey& rey);
+
+#endif
