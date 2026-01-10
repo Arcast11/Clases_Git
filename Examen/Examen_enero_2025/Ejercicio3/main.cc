@@ -20,8 +20,8 @@
 
 int main() {
   std::vector<Rey> reyes{};
+  reyes.reserve(10);
   Rey auxiliar_lectura{};
-
   while (std::cin >> auxiliar_lectura) {
     reyes.emplace_back(auxiliar_lectura);
   }
