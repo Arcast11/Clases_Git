@@ -88,7 +88,6 @@ rational_t::is_greater(const rational_t& r, const double precision) const
 
 
 
-
 bool 
 rational_t::is_less(const rational_t& r, const double precision) const 
 {
@@ -110,7 +109,6 @@ rational_t::add(const rational_t& r)
   int result_denominator = (rational_t::get_den() * r.get_den());
   return {result_numerator, result_denominator};
 }
-
 
 
 
@@ -140,8 +138,6 @@ rational_t::divide(const rational_t& r)
   return {rational_t::get_num() * r.get_den(),
           rational_t::get_den() * r.get_num()};
 }
-
-
 
 
 // E/S
