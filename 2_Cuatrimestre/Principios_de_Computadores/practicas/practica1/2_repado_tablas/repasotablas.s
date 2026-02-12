@@ -34,19 +34,19 @@
 #}
 
 	.data
-strTitulo:	.asciiz "Programa para repasar las tablas de multiplicar.\n"
+strTitulo:		.asciiz "Programa para repasar las tablas de multiplicar.\n"
 strQueTabla:	.asciiz "¿Qué tabla deseas repasar? Introduce un número (0 para salir): "
-strX:		.asciiz " x "
+strX:			.asciiz " x "
 strInterroga:	.asciiz " ? "
 strTuPorcen:	.asciiz "Tu porcenaje de aciertos es del "
-strPorcent:	.asciiz "%\n"
-strTermina:	.asciiz "Termina el programa.\n"
+strPorcent:		.asciiz "%\n"
+strTermina:		.asciiz "Termina el programa.\n"
 
 	.text
 # Asignación de variablas a registros
-# n 		-> $s0
-# aciertos 	-> $s1
-# i 		-> $s2
+# n 			-> $s0
+# aciertos 		-> $s1
+# i 			-> $s2
 # resultado 	-> $s3
 # porcentaje	-> $s4
 

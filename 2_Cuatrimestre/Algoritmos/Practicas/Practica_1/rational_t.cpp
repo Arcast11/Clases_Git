@@ -147,6 +147,8 @@ rational_t::write(ostream& os) const
   os << get_num() << "/" << get_den() << "=" << value() << endl;
 }
 
+
+
 void 
 rational_t::read(istream& is) 
 {
