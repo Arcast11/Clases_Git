@@ -1,15 +1,16 @@
-// AUTOR:
-// FECHA:
-// EMAIL:
-// VERSION: 1.0
-// ASIGNATURA: Algoritmos y Estructuras de Datos
-// PRÁCTICA Nº: 1
-// COMENTARIOS: se indican entre [] las pautas de estilo aplicadas de
-//              "C++ Programming Style Guidelines"
-//              https://geosoft.no/development/cppstyle.html
-// COMPILACIÓN: g++ -g rational_t.cpp main_rational_t.cpp -o main_rational_t
-
-// pauta de estilo [92]: comentarios multilínea usando solo "//"
+/* AUTOR:
+ * FECHA:
+ * EMAIL:
+ * VERSION: 1.0
+ * ASIGNATURA: Algoritmos y Estructuras de Datos
+ * PRÁCTICA Nº: 1
+ * COMENTARIOS: se indican entre [] las pautas de estilo aplicadas de
+ *            "C++ Programming Style Guidelines"
+ *           https://geosoft.no/development/cppstyle.html
+ * COMPILACIÓN: g++ -g rational_t.cpp main_rational_t.cpp -o main_rational_t
+ *
+ * pauta de estilo [92]: comentarios multilínea usando solo "//"
+ */
 
 #include <cmath>
 #include <iostream>
