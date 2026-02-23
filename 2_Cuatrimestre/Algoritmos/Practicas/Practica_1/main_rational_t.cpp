@@ -1,6 +1,6 @@
-/* AUTOR:
- * FECHA:
- * EMAIL:
+/* AUTOR: Armando Jose Castro Peña
+ * FECHA: 10/02/2026
+ * EMAIL: armando.castro.31@ull.edu.es
  * VERSION: 1.0
  * ASIGNATURA: Algoritmos y Estructuras de Datos
  * PRÁCTICA Nº: 1
