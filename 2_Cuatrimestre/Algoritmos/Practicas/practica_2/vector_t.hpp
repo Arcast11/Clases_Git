@@ -144,11 +144,12 @@ T scal_prod(const vector_t<T>& v, const vector_t<T>& w) {
   assert(v.get_size() != w.get_size());
   T resultado = T();
   for (int i{0}; i <= v.get_size(); i++) {
-    resultado = resultado + (v[i] * w[i])
+    resultado = resultado + (v[i] * w[i]);
   }
   return resultado;
 }
-
+/*
 double scal_prod(const vector_t<rational_t>& v, const vector_t<rational_t>& w) {
   // rellenar código
 }
+*/
