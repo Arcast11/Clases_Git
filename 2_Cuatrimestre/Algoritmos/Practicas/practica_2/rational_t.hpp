@@ -1,6 +1,6 @@
-// AUTOR: 
-// FECHA: 
-// EMAIL: 
+// AUTOR:
+// FECHA:
+// EMAIL:
 // VERSION: 1.0
 // ASIGNATURA: Algoritmos y Estructuras de Datos
 // PRÁCTICA Nº: 2
@@ -12,28 +12,27 @@
 
 #pragma once
 
-#include <iostream>
 #include <cassert>
 #include <cmath>
+#include <iostream>
 
 // pauta de estilo [5]
-# define EPSILON 1e-6
+#define EPSILON 1e-6
 
 using namespace std;
 
-class rational_t
-{
+class rational_t {
   // pautas de estilos [44] y [73]: primero "public" y después "private"
-public:
+ public:
   rational_t(const int = 0, const int = 1);
   ~rational_t() {}
-  
+
   // pauta de estilo [71]: indentación a 2 espacios
-  
+
   // getters
   int get_num() const;
   int get_den() const;
-  
+
   // setters
   void set_num(const int);
   void set_den(const int);
@@ -53,12 +52,11 @@ public:
 
   void write(ostream& os = cout) const;
   void read(istream& is = cin);
-  
-private:
+
+ private:
   // pauta de estilo [11]: nombre de los atributos seguido de "_"
   int num_, den_;
 };
-
 
 // sobrecarga de los operadores de E/S
 ostream& operator<<(ostream& os, const rational_t&);
@@ -69,4 +67,3 @@ rational_t operator+(const rational_t&, const rational_t&);
 rational_t operator-(const rational_t&, const rational_t&);
 rational_t operator*(const rational_t&, const rational_t&);
 rational_t operator/(const rational_t&, const rational_t&);
-
