@@ -13,6 +13,8 @@
 #include <cassert>
 #include <iostream>
 
+#include "rational_t.hpp"
+
 using namespace std;
 
 template <class T>
@@ -141,15 +143,26 @@ void vector_t<T>::read(istream& is) {
 // FASE II: producto escalar
 template <class T>
 T scal_prod(const vector_t<T>& v, const vector_t<T>& w) {
-  assert(v.get_size() != w.get_size());
+  assert(v.get_size() == w.get_size());
   T resultado = T();
-  for (int i{0}; i <= v.get_size(); i++) {
+  for (int i{0}; i < v.get_size(); i++) {
     resultado = resultado + (v[i] * w[i]);
   }
   return resultado;
 }
-/*
+
 double scal_prod(const vector_t<rational_t>& v, const vector_t<rational_t>& w) {
-  // rellenar código
+  assert(v.get_size() == w.get_size());
+  double resultado{0.0};
+  for (int i{0}; i < v.get_size(); i++) {
+    /** Realizamos la operación con double, piuesto que los racionales
+     * crecen muy rapido
+     * */
+
+    double valor_v = v[i].value();
+    double valor_w = w[i].value();
+
+    resultado = resultado + (valor_v * valor_w);
+  }
+  return resultado;
 }
-*/

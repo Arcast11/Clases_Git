@@ -76,21 +76,19 @@ rational_t rational_t::divide(const rational_t& r) const {
 
 // FASE I: operadores
 rational_t operator+(const rational_t& a, const rational_t& b) {
-  return {(a.get_num() * b.get_den()) + (b.get_num() * a.get_den()),
-          (a.get_den() * b.get_den())};
+  return a.add(b);
 }
 
 rational_t operator-(const rational_t& a, const rational_t& b) {
-  return {(a.get_num() * b.get_den()) - (b.get_num() * a.get_den()),
-          (a.get_den() * b.get_den())};
+  return {a.substract(b)};
 }
 
 rational_t operator*(const rational_t& a, const rational_t& b) {
-  return {a.get_num() * b.get_num(), a.get_den() * b.get_num()};
+  return {a.multiply(b)};
 }
 
 rational_t operator/(const rational_t& a, const rational_t& b) {
-  return {a.get_num() * b.get_den(), a.get_den() * b.get_num()};
+  return {a.divide(b)};
 }
 
 // E/S

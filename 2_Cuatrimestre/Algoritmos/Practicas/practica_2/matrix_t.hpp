@@ -130,5 +130,5 @@ inline int matrix_t<T>::pos(const int i, const int j) const {
 // FASE III: producto matricial
 template <class T>
 void matrix_t<T>::multiply(const matrix_t<T>& A, const matrix_t<T>& B) {
-  // rellenar código
+  // RELLENAR
 }
