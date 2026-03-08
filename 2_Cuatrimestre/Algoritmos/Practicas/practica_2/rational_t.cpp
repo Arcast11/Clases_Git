@@ -76,7 +76,7 @@ rational_t rational_t::divide(const rational_t& r) const {
 
 // FASE I: operadores
 rational_t operator+(const rational_t& a, const rational_t& b) {
-  return a.add(b);
+  return {a.add(b)};
 }
 
 rational_t operator-(const rational_t& a, const rational_t& b) {

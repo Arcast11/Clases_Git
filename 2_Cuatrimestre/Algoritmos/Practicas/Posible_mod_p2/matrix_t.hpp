@@ -39,6 +39,7 @@ class matrix_t {
 
   // operaciones y operadores
   void multiply(const matrix_t<T>&, const matrix_t<T>&);
+  void multiply_vector(const vector_t<T>&, vector_t<T>&) const;
 
   void write(ostream& = cout) const;
   void read(istream& = cin);
@@ -146,5 +147,25 @@ void matrix_t<T>::multiply(const matrix_t<T>& A, const matrix_t<T>& B) {
         at(i, j) = at(i, j) + (A.at(i, k) * B.at(k, j));
       }
     }
+  }
+}
+
+template <class T>
+void matrix_t<T>::multiply_vector(const vector_t<T>& v,
+                                  vector_t<T>& result) const {
+  assert(get_n() == v.get_size());
+
+  // creamos vector cuyo yamaño es m
+  result.vector_t<T>::resize(get_m());
+
+  // Recorremos las filas de la matriz
+  for (int i{1}; i <= get_m(); i++) {
+    // variable auxiliar para almacenar la suma de las filas
+    T suma_fila = T();
+    // recorremos los elmentos del vector puesto que n = vec_size
+    for (int j{1}; j <= get_n(); j++) {
+      suma_fila = suma_fila + (at(i, j) * v[j - 1]);
+    }
+    result[i - 1] = suma_fila;
   }
 }

@@ -64,5 +64,16 @@ int main() {
   cout << "Multiplicación de matrices A y B: " << endl;
   C.write();
 
+  // Modificación
+  matrix_t<int> matriz;
+  vector_t<int> vector, result_mod;
+
+  matriz.read(), matriz.write();
+  vector.read(), vector.write();
+
+  matriz.multiply_vector(vector, result_mod);
+  cout << "matriz x vector: " << endl;
+  result_mod.write();
+
   return 0;
 }
