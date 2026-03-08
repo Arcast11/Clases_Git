@@ -1,4 +1,4 @@
-ge#// Programa para evaluar polinomio tercer grado
+#// Programa para evaluar polinomio tercer grado
 #//Realiza un programa en ensamblador MIPS que evalúe un polinomio de tercer 
 #//grado de la forma 
 #//f(x) = a x^3 + b x^2 + c x + d
@@ -159,7 +159,7 @@ do:
 
 #   } while (r > s);
 while_r_gt_s:
-	blt	$s0,$s1
+	blt	$s0,$s1,do
 
 #   for (int x = r ; x <= ,s;s ; x++) {
 for:
@@ -184,17 +184,17 @@ for_dentro:
 
 #     f += x*c;
 	mul.s	$f4, $f18, $f24 #	x*c → $f4
-	add	$f28, $f28, $f4
+	add.s	$f28, $f28, $f4
 
 
 #     f += x*x*b;
 	mul.s 	$f6,$f4,$f4		# 	x * x → $f6
 	mul.s 	$f7,$f6,$f22		# 	x * x * c → $f7
-	add 	$f28, $f28, $f7
+	add.s 	$f28, $f28, $f7
 
 #     f += x*x*x*a;
 	mul.s	$f8,$f6,$f20
-	add 	$f28,$f28,$f8
+	add.s 	$f28,$f28,$f8
 	
 #    if (f >= 2.5) {
 if_f_25:
@@ -210,7 +210,7 @@ if_f_25_then:
 	syscall
 	
 #	Convertimos x a entero de nuevo
-	mfc1	$f18,$s2
+	mfc1	$s2,$f18
 	
 	li	$v0,1
 	move	$s2,$a1
