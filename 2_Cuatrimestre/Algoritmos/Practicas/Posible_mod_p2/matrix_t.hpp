@@ -39,7 +39,10 @@ class matrix_t {
 
   // operaciones y operadores
   void multiply(const matrix_t<T>&, const matrix_t<T>&);
+
+  // Modificaciones para practicar
   void multiply_vector(const vector_t<T>&, vector_t<T>&) const;
+  T trace() const;
 
   void write(ostream& = cout) const;
   void read(istream& = cin);
@@ -150,6 +153,8 @@ void matrix_t<T>::multiply(const matrix_t<T>& A, const matrix_t<T>& B) {
   }
 }
 
+// Modificaciones para practicar
+
 template <class T>
 void matrix_t<T>::multiply_vector(const vector_t<T>& v,
                                   vector_t<T>& result) const {
@@ -168,4 +173,16 @@ void matrix_t<T>::multiply_vector(const vector_t<T>& v,
     }
     result[i - 1] = suma_fila;
   }
+}
+
+template <class T>
+T matrix_t<T>::trace() const {
+  assert(get_m() == get_n());
+
+  T suma_diagonal = T();
+
+  for (size_t i{1}; i <= get_m(); i++) {
+    suma_diagonal = at(i, i) + at(i, i);
+  }
+  return suma_diagonal;
 }

@@ -64,7 +64,7 @@ int main() {
   cout << "Multiplicación de matrices A y B: " << endl;
   C.write();
 
-  // Modificación
+  // Modificación vector por matrices
   matrix_t<int> matriz;
   vector_t<int> vector, result_mod;
 
@@ -74,6 +74,16 @@ int main() {
   matriz.multiply_vector(vector, result_mod);
   cout << "matriz x vector: " << endl;
   result_mod.write();
+
+  // Modificación trace
+  matrix_t<double> D;
+
+  D.read(), D.write();
+
+  double suma_diagonal{0};
+
+  suma_diagonal = D.trace();
+  cout << suma_diagonal << std::endl;
 
   return 0;
 }
