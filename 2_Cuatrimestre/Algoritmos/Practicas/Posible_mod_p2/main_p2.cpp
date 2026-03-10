@@ -83,7 +83,19 @@ int main() {
   double suma_diagonal{0};
 
   suma_diagonal = D.trace();
+  cout << "La suma de la diagonal principal es: ";
   cout << suma_diagonal << std::endl;
+
+  // Modificación trastpuesta
+  matrix_t<double> traspuesta;
+  D.traspose(traspuesta);
+  cout << "El resultado de la traspuesta es: " << endl;
+  traspuesta.write();
+
+  // Modificación de vector
+  cout << "Tomamos como vector la fila 2 :" << std::endl;
+  vector_t<double> fila_extraida = D.GetRow(2);
+  fila_extraida.write();
 
   return 0;
 }

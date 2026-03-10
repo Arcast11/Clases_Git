@@ -143,7 +143,7 @@ void matrix_t<T>::multiply(const matrix_t<T>& A, const matrix_t<T>& B) {
       at(i, j) = 0;
       // Recorre los elementos individuales para relizar la multiplicación
       for (size_t k{1}; k <= A.get_n(); k++) {
-        at(i, j) = at(i, j) + (A.at(i, k) * B.at(k, j));
+        at(i, j) = at(i, j) + (A(i, k) * B(k, j));
       }
     }
   }

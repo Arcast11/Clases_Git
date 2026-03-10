@@ -39,10 +39,21 @@ class matrix_t {
 
   // operaciones y operadores
   void multiply(const matrix_t<T>&, const matrix_t<T>&);
+  void suma(const matrix_t<T>&, const matrix_t<T>&);
 
   // Modificaciones para practicar
   void multiply_vector(const vector_t<T>&, vector_t<T>&) const;
   T trace() const;
+  void traspose(matrix_t<T>&) const;
+  vector_t<T> GetRow(const int i) const;
+
+  T suma_total(void) const;
+  T suma_diag_p(void) const;
+  T suma_diag_s(void) const;
+  T suma_tria_inf_diag(void) const;
+  T suma_tria_inf(void) const;
+  T suma_tria_sup_diag(void) const;
+  T suma_tria_sup(void) const;
 
   void write(ostream& = cout) const;
   void read(istream& = cin);
@@ -147,8 +158,19 @@ void matrix_t<T>::multiply(const matrix_t<T>& A, const matrix_t<T>& B) {
       at(i, j) = 0;
       // Recorre los elementos individuales para relizar la multiplicación
       for (size_t k{1}; k <= A.get_n(); k++) {
-        at(i, j) = at(i, j) + (A.at(i, k) * B.at(k, j));
+        at(i, j) = at(i, j) + (A(i, k) * B(k, j));
       }
+    }
+  }
+}
+
+template <class T>
+void matrix_t<T>::suma(const matrix_t<T>& A, const matrix_t<T>& B) {
+  assert(A.get_m() == B.get_m() && A.get_n() == B.get_n());
+  resize(A.get_m(), A.get_n());
+  for (size_t i{1}; i <= get_m(); i++) {
+    for (size_t j{1}; j <= get_n(); j++) {
+      at(i, j) = A(i, j) + B(i, j);
     }
   }
 }
@@ -185,4 +207,100 @@ T matrix_t<T>::trace() const {
     suma_diagonal = at(i, i) + at(i, i);
   }
   return suma_diagonal;
+}
+
+template <class T>
+void matrix_t<T>::traspose(matrix_t<T>& resultado) const {
+  resultado.resize(get_m(), get_n());
+
+  for (size_t i{1}; i <= get_m(); i++) {
+    for (size_t j{1}; j <= get_n(); j++) {
+      resultado(i, j) = at(j, i);
+    }
+  }
+}
+
+template <class T>
+vector_t<T> matrix_t<T>::GetRow(const int i) const {
+  assert(i >= 1 && i <= get_m());
+
+  vector_t<T> resultado(get_n());
+
+  for (size_t j{1}; j <= get_m(); j++) {
+    resultado[j - 1] = at(i, j);
+  }
+  return resultado;
+}
+
+template <class T>
+T matrix_t<T>::suma_total(void) const {
+  T suma = T();
+  for (size_t i{1}; i <= get_m(); i++) {
+    for (size_t j{1}; j <= get_n(); j++) {
+      suma = suma + at(i, j);
+    }
+  }
+  return suma;
+}
+
+template <class T>
+T matrix_t<T>::suma_diag_p(void) const {
+  T suma = T();
+  for (size_t i{1}; i <= get_m(); i++) {
+    suma = suma + at(i, i);
+  }
+  return suma;
+}
+
+template <class T>
+T matrix_t<T>::suma_diag_s(void) const {
+  T suma = T();
+  for (size_t i{1}; i <= get_m(); i++) {
+    suma = suma + at(i, get_n() - i + 1);
+  }
+  return suma;
+}
+
+template <class T>
+T matrix_t<T>::suma_tria_inf_diag(void) const {
+  T suma = T();
+  for (size_t i{1}; i <= get_m(); i++) {
+    for (size_t j{1}; j < i; j++) {
+      suma = suma + at(i, j);
+    }
+  }
+  return suma;
+}
+
+template <class T>
+T matrix_t<T>::suma_tria_inf(void) const {
+  T suma = T();
+  for (size_t i{1}; i <= get_m(); i++) {
+    for (size_t j{1}; j <= i; j++) {
+      suma = suma + at(i, j);
+    }
+  }
+  return suma;
+}
+
+template <class T>
+T matrix_t<T>::suma_tria_sup_diag(void) const {
+  T suma = T();
+  for (size_t i{1}; i <= get_m(); i++) {
+    for (size_t j{i + 1}; j <= get_n(); j++) {
+      suma = suma + at(i, j);
+    }
+  }
+  return suma;
+}
+
+template <class T>
+T matrix_t<T>::suma_tria_sup(void) const {
+  T suma = T();
+  for (size_t i{1}; i <= get_m(); i++) {
+    for (size_t j{i}; j <= get_n(); j++) {
+      suma = suma + at(i, j);
+    }
+  }
+  return suma;
 }
