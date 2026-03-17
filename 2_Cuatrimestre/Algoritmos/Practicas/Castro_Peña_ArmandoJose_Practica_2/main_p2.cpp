@@ -1,13 +1,14 @@
-// AUTOR:
-// FECHA:
-// EMAIL:
-// VERSION: 1.0
-// ASIGNATURA: Algoritmos y Estructuras de Datos
-// PRÁCTICA Nº: 2
-// COMENTARIOS: se indican entre [] las pautas de estilo aplicadas de
-//              "C++ Programming Style Guidelines"
-//              https://geosoft.no/development/cppstyle.html
-// COMPILACIÓN: g++ -g rational_t.cpp main_p2.cpp -o main_p2
+/* AUTOR: Armando Jose Castro Peña
+ * FECHA:10/03/2026
+ * EMAIL: armando.castro.21@ull.edu.es
+ * VERSION: 1.0
+ * ASIGNATURA: Algoritmos y Estructuras de Datos
+ * PRÁCTICA Nº: 2
+ * COMENTARIOS: se indican entre [] las pautas de estilo aplicadas de
+ *              "C++ Programming Style Guidelines"
+ *              https://geosoft.no/development/cppstyle.html
+ * COMPILACIÓN: g++ -g rational_t.cpp main_p2.cpp -o main_p2
+ */
 
 // pauta de estilo [92]: comentarios multilínea usando solo "//"
 
@@ -63,6 +64,12 @@ int main() {
   C.multiply(A, B);
   cout << "Multiplicación de matrices A y B: " << endl;
   C.write();
+
+  cout << "Maximo del vector x: ";
+  cout << max(x) << endl;
+
+  cout << "Maximo del vector y: ";
+  cout << max(y) << endl;
 
   return 0;
 }

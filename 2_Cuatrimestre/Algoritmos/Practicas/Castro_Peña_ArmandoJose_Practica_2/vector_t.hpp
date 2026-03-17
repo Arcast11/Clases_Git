@@ -1,12 +1,13 @@
-// AUTOR:
-// FECHA:
-// EMAIL:
-// VERSION: 1.0
-// ASIGNATURA: Algoritmos y Estructuras de Datos
-// PRÁCTICA Nº: 2
-// COMENTARIOS: se indican entre [] las pautas de estilo aplicadas de
-//              "C++ Programming Style Guidelines"
-//              https://geosoft.no/development/cppstyle.html
+/* AUTOR: Armando Castro
+ * FECHA: 10/03/2026
+ * EMAIL: armando.castro.31@ull.edu.es
+ * VERSION: 1.0
+ * ASIGNATURA: Algoritmos y Estructuras de Datos
+ * PRÁCTICA Nº: 2
+ * COMENTARIOS: se indican entre [] las pautas de estilo aplicadas de
+ *              "C++ Programming Style Guidelines"
+ *              https://geosoft.no/development/cppstyle.html
+ */
 
 #pragma once
 
@@ -39,6 +40,9 @@ class vector_t {
   // getters constantes
   const T& at(const int) const;
   const T& operator[](const int) const;
+
+  // Modificacion clase
+  // rational_t max(const vector_t<rational_t>&);
 
   void write(ostream& = cout) const;
   void read(istream& = cin);
@@ -165,4 +169,15 @@ double scal_prod(const vector_t<rational_t>& v, const vector_t<rational_t>& w) {
     resultado = resultado + (valor_v * valor_w);
   }
   return resultado;
+}
+
+// Modificaión de practica
+rational_t max(const vector_t<rational_t>& v) {
+  rational_t maximo = v[0];
+  for (int i{1}; i < v.get_size(); i++) {
+    if (v[i].is_greater(maximo)) {
+      maximo = v[i];
+    }
+  }
+  return maximo;
 }
