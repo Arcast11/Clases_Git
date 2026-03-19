@@ -108,7 +108,7 @@ bool Polynomial::IsEqual(const Polynomial& pol, const double eps) const {
 
   // bucle para recorrer el polynomio. Si son diferentes, para
   for (int i{0}; i < min_size && !differents; i++) {
-    if (IsNotZero(at(i) - pol.at(i), eps)) {
+    if (IsNotZero(fabs(at(i) - pol.at(i)), eps)) {
       differents = true;
     }
   }
@@ -161,14 +161,63 @@ bool SparsePolynomial::IsEqual(const SparsePolynomial& spol,
                                const double eps) const {
   bool differents = false;
   // poner el código aquí
-  for (size_t i{0}; i < get_nz();) return !differents;
+  if (spol.get_nz() != get_nz()) {
+    return differents;
+  }
+  for (size_t i{0}; i < get_nz() && !differents; i++) {
+    if (IsNotZero(fabs(spol.at(i).get_val() - at(i).get_val()), eps)) {
+      differents = true;
+    }
+  }
+  return !differents;
 }
 
 // Comparación si son iguales dos polinomios representados por
 // vector disperso y vector denso
 bool SparsePolynomial::IsEqual(const Polynomial& pol, const double eps) const {
   bool differents = false;
-  // poner el código aquí
+
+  // 1. Verificar que todos los elementos del disperso coincidan con el denso
+  for (int i = 0; i < get_nz() && !differents; i++) {
+    int index = at(i).get_inx();
+    double value = at(i).get_val();
+
+    if (index < pol.get_size()) {
+      // Si el índice existe en el denso, comparamos valores
+      if (!IsNotZero(fabs(value - pol.at(index)), eps)) {
+        // Son iguales en este punto, seguimos
+      } else {
+        differents = true;
+      }
+    } else {
+      // Si el disperso tiene un grado que el denso no tiene,
+      // y ese valor es no nulo, no pueden ser iguales.
+      if (IsNotZero(value, eps)) {
+        differents = true;
+      }
+    }
+  }
+
+  // 2. Verificar que el denso no tenga valores extra donde el disperso es
+  // "cero" Recorremos el polinomio denso por completo
+  for (int i = 0; i < pol.get_size() && !differents; i++) {
+    // Buscamos si este índice 'i' está en nuestro vector disperso
+    bool found_in_sparse = false;
+    for (int j = 0; j < get_nz(); j++) {
+      if (at(j).get_inx() == i) {
+        found_in_sparse = true;
+        break;
+      }
+    }
+
+    // Si el índice NO está en el disperso, el valor en el denso DEBE ser cero
+    if (!found_in_sparse) {
+      if (IsNotZero(pol.at(i), eps)) {
+        differents = true;
+      }
+    }
+  }
+
   return !differents;
 }
 
