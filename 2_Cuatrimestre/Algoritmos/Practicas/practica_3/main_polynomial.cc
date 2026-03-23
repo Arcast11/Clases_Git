@@ -1,13 +1,14 @@
-// AUTOR: 
-// FECHA: 
-// EMAIL: 
-// VERSION: 1.0
-// ASIGNATURA: Algoritmos y Estructuras de Datos
-// PRÁCTICA Nº: 3
-// ESTILO: Google C++ Style Guide
-// COMENTARIOS: 
-// COMPILACIÓN: g++ -g main_polynomial.cc -o main_polynomial
-// EJECUCIÓN: ./main_polynomial < data_polynomial.txt
+/** AUTOR: Armando Castro
+ * FECHA: 10/10/2023
+ * EMAIL: armando.castro@ull.edu .es
+ * VERSION: 1.0
+ * ASIGNATURA: Algoritmos y Estructuras de Datos
+ * PRÁCTICA Nº: 3
+ * ESTILO: Google C++ Style Guide
+ * COMENTARIOS:
+ * COMPILACIÓN: g++ -g main_polynomial.cc -o main_polynomial
+ * EJECUCIÓN: ./main_polynomial < data_polynomial.txt
+ */
 
 #include <iostream>
 
@@ -15,17 +16,16 @@
 
 using namespace std;
 
-int main()
-{
+int main() {
   Polynomial p1, p2, p3;
-  
+
   cin >> p1 >> p2 >> p3;
   cout << "p1= " << p1;
   cout << "p2= " << p2;
   cout << "p3= " << p3;
   cout << endl;
 
-   // Fase II
+  // Fase II
   SparsePolynomial sp1(p1), sp2(p2), sp3(p3);
   cout << "sp1= " << sp1;
   cout << "sp2= " << sp2;

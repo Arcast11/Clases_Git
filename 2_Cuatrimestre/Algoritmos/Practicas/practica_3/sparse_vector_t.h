@@ -1,12 +1,12 @@
-// AUTOR:
-// FECHA:
-// EMAIL:
-// VERSION: 4.0
-// ASIGNATURA: Algoritmos y Estructuras de Datos
-// PRÁCTICA Nº: 3
-// ESTILO: Google C++ Style Guide
-// COMENTARIOS:
-//
+/** AUTOR: Armando Castro
+ * FECHA: 10/10/2023
+ * EMAIL: armando.castro@ull.edu.es
+ * VERSION: 4.0
+ * ASIGNATURA: Algoritmos y Estructuras de Datos
+ * PRÁCTICA Nº: 3
+ * ESTILO: Google C++ Style Guide
+ * COMENTARIOS:
+ */
 
 #ifndef SPARSE_VECTORT_H_
 #define SPARSE_VECTORT_H_
