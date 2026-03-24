@@ -225,12 +225,13 @@ bool SparsePolynomial::IsEqual(const Polynomial& pol, const double eps) const {
 }
 
 double SparsePolynomial::get_monomio(int i) {
+  double coeficiente = 0.0;
   for (int j = 0; j < get_nz(); j++) {
     if (at(j).get_inx() == i) {
-      return at(j).get_val();
+      coeficiente = at(j).get_val();
     }
   }
-  return 0.0;
+  return coeficiente;
 }
 
 #endif  // POLYNOMIAL_H_
