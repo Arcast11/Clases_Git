@@ -52,6 +52,9 @@ class SparsePolynomial : public sparse_vector_t {
   // E/S
   void Write(std::ostream& = std::cout) const;
 
+  // Modigicación
+  double get_monomio(int i);
+
   // operaciones
   double Eval(const double) const;
   bool IsEqual(const SparsePolynomial&, const double = EPS) const;
@@ -219,6 +222,15 @@ bool SparsePolynomial::IsEqual(const Polynomial& pol, const double eps) const {
   }
 
   return !differents;
+}
+
+double SparsePolynomial::get_monomio(int i) {
+  for (int j = 0; j < get_nz(); j++) {
+    if (at(j).get_inx() == i) {
+      return at(j).get_val();
+    }
+  }
+  return 0.0;
 }
 
 #endif  // POLYNOMIAL_H_

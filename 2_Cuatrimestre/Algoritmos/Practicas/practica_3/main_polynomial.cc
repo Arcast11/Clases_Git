@@ -91,5 +91,13 @@ int main() {
   cout << "sp3 == p2? " << (sp3.IsEqual(p2) ? "true" : "false") << endl;
   cout << endl;
 
+  // Modificación
+
+  cout << "sp1 monomio de grado " << 0 << " = " << sp1.get_monomio(0) << endl;
+  cout << "sp1 monomio de grado " << 3 << " = " << sp1.get_monomio(3) << endl;
+  cout << "sp2 monomio de grado " << 0 << " = " << sp2.get_monomio(0) << endl;
+  cout << "sp2 monomio de grado " << 3 << " = " << sp2.get_monomio(3) << endl;
+  cout << "sp3 monomio de grado " << 0 << " = " << sp3.get_monomio(0) << endl;
+  cout << "sp3 monomio de grado " << 3 << " = " << sp3.get_monomio(3) << endl;
   return 0;
 }
