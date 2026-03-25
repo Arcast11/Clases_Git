@@ -1,8 +1,6 @@
 /** AUTOR: Armando Castro
  *  FECHA: 10/10/2023
- *  EMAIL: armando.castro@ull.edu.es
- *  VERSION: 1.0
- *  ASIGNATURA: Algoritmos y Estructuras de Datos
+ *  VERSION: 1.  ASIGNATURA: Algoritmos y Estructuras de Datos
  *  PRÁCTICA Nº: 3
  *  ESTILO: Google C++ Style Guide
  *  COMENTARIOS:
