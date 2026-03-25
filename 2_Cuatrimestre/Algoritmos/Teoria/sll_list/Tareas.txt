@@ -1,0 +1,20 @@
+
+
+######### Tarea 1 Compilar el programa #####################
+
+¿ Por qué la salida L1, sale en oreden inverso ?
+
+ Porque al insertar elementos, lo insertamos por el frente, utilizando
+ push_front().
+
+######### Tarea 2: implemente la insersión por la cola #### 
+
+se añade el metodo a la clase sll:
+void insert_tail(sll_node<T>* n)
+
+para ello implementamos primero el metodo auxiliar sll_node<T>* tail(void)
+
+######### Tarea 3 implementar extraxión del ultimo noco ####
+
+Se aññade a la clase sll el metodo 
+sll_node_t<T>* extract_tail(void)

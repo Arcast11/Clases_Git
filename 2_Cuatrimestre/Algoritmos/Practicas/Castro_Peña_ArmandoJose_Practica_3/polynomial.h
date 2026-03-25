@@ -1,11 +1,12 @@
-/** AUTOR: Armando Castro
- *  FECHA: 10/10/2023
- *  VERSION: 1.  ASIGNATURA: Algoritmos y Estructuras de Datos
- *  PRÁCTICA Nº: 3
- *  ESTILO: Google C++ Style Guide
- *  COMENTARIOS:
- */
-
+S /** AUTOR: Armando Castro
+   *  FECHA: 10/10/2023
+   *  EMAIL: armando.castro@ull.edu.es
+   *  VERSION: 1.0
+   *  ASIGNATURA: Algoritmos y Estructuras de Datos
+   *  PRÁCTICA Nº: 3
+   *  ESTILO: Google C++ Style Guide
+   *  COMENTARIOS:
+   */
 #ifndef POLYNOMIAL_H_
 #define POLYNOMIAL_H_
 
@@ -17,8 +18,8 @@
 #include "sparse_vector_t.h"
 #include "vector_t.h"
 
-// Clase para polinomios basados en vectores densos de doubles
-class Polynomial : public vector_t<double> {
+    // Clase para polinomios basados en vectores densos de doubles
+    class Polynomial : public vector_t<double> {
  public:
   // constructores
   Polynomial(const int n = 0) : vector_t<double>(n) {};

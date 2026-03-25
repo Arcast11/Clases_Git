@@ -1,11 +1,11 @@
-// AUTOR: 
-// FECHA: 
-// EMAIL: 
+// AUTOR:
+// FECHA:
+// EMAIL:
 // VERSION: 3.0
 // ASIGNATURA: Algoritmos y Estructuras de Datos
 // PRÁCTICA Nº: 4
 // ESTILO: Google C++ Style Guide
-// COMENTARIOS: 
+// COMENTARIOS:
 // COMPILACIÓN: g++ -g main_sll.cc -o main_sll
 // EJECUCIÓN: ./main_sll
 
@@ -17,8 +17,7 @@
 
 using namespace std;
 
-int main(void)
-{
+int main(void) {
   sll_t<char> lista;
 
   // Inserción de N_CHARS elementos ('a', 'b, 'c' ...) a la lista por el frente
@@ -60,7 +59,7 @@ int main(void)
   // Búsqueda e impresión del elemento 4 con valor 'n'
   nodo = lista.search('n');
   dato = nodo->get_data();
-  cout << "Dato 4: " << dato << endl; 
+  cout << "Dato 4: " << dato << endl;
 
   // Extracción del elemento siguiente al de valor 'n' localizado anteriormente
   nodo = lista.erase_after(nodo);
@@ -69,7 +68,19 @@ int main(void)
 
   // Impresión de la lista elemento a elemento
   lista.write(cout);
-  cout << endl;	
+  cout << endl;
 
+  // Prueba de el metodo tail
+  cout << "tail es: ";
+  nodo = lista.tail();
+  dato = nodo->get_data();
+  cout << dato << endl;
+
+  // Prueba del metodo inster_tail
+  nodo = new sll_node_t<char>('z');
+  lista.insert_tail(nodo);
+  cout << "Se ha insertado la letra 'z' al final de la lista" << endl;
+  lista.write(cout);
+  cout << endl;
   return 0;
 }
