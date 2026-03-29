@@ -82,5 +82,14 @@ int main(void) {
   cout << "Se ha insertado la letra 'z' al final de la lista" << endl;
   lista.write(cout);
   cout << endl;
+
+  // Prueba del metodo extract_tail
+  nodo = lista.extract_tail();
+  dato = nodo->get_data();
+  delete nodo;
+  cout << "Se ha extraído la letra '" << dato << "' del final de la lista"
+       << endl;
+  lista.write(cout);
+  cout << endl;
   return 0;
 }

@@ -140,7 +140,20 @@ void sll_t<T>::insert_tail(sll_node_t<T>* n) {
 
 // Método para extraer el final de la lista
 template <class T>
-sll_node_t<T>* sll_t<T>::extract_tail(void) {}
+sll_node_t<T>* sll_t<T>::extract_tail(void) {
+  sll_node_t<T>* aux = tail();
+  if (aux == head_) {
+    head_ = NULL;
+  } else {
+    sll_node_t<T>* prev = head_;
+    while (prev->get_next() != aux) {
+      prev = prev->get_next();
+    }
+    prev->set_next(NULL);
+  }
+
+  return aux;
+}
 
 // E/S
 template <class T>
