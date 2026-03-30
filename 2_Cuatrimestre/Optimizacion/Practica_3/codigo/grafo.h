@@ -43,6 +43,7 @@ typedef struct {
 typedef vector<ElementoLista> LA_nodo;
 
 class GRAFO {
+ private:
   unsigned dirigido;  // 0 si el grafo es no dirigido y 1 si es dirigido
   unsigned n;         // numero de NODOS
   unsigned m;         // numero de ARCOS
@@ -77,8 +78,8 @@ class GRAFO {
   Es_dirigido();  // devuelve 0 si el grafo es no dirigido y 1 si es dirigido
   void Info_Grafo();           // devuelve informacion b�sica del grafo
   void Mostrar_Listas(int l);  // Muestra la lista de adyacencia
-  void ListaPredecesores();  // Recorre la lista de sucesores LS para construir
-                             // la de predecesores, LP
+  void ListaPredecesores();   // Recorre la lista de sucesores LS para construir
+                              // la de predecesores, LP
   void ComponentesConexas();  // Construye el vector de componentes conexas de
                               // un grafo no dirigido
   void ComponentesFuertementeConexas();  //
