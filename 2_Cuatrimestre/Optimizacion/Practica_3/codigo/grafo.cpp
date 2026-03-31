@@ -29,21 +29,36 @@ void GRAFO ::build(char nombrefichero[85], int& errorapertura) {
     // los nodos internamente se numeran desde 0 a n-1
     // creamos las n listas de sucesores
     LS.resize(n);
+    if (dirigido == 1) {
+      LP.resize(n);
+    }
     // leemos los m arcos
     for (k = 0; k < m; k++) {
       textfile >> (unsigned&)i >> (unsigned&)j >> (int&)dummy.c;
       // damos los valores a dummy.j y dummy.c
+      dummy.j = j;
       // situamos en la posici�n del nodo i a dummy mediante push_back
-      // pendiente de hacer un segundo push_back si es no dirigido. O no.
-      // pendiente la construcci�n de LP, si es dirigido
-      // pendiente del valor a devolver en errorapertura
-      //...
+      LS[i].push_back(dummy);
+      // hacer un segundo push_back si es no dirigido. O no.
+      if (dirigido == 1) {
+        // construcci�n de LP, si es dirigido
+        dummy.j = i;
+        LP[j].push_back(dummy);
+      } else {
+        dummy.j = i;
+        LS[j].push_back(dummy);
+      }
     }
+
+    // valor a devolver en errorapertura
+    errorapertura = 0;
+    textfile.close();
+  } else {
+    errorapertura = 1;
   }
 }
 
 GRAFO::~GRAFO() { destroy(); }
-
 GRAFO::GRAFO(char nombrefichero[85], int& errorapertura) {
   build(nombrefichero, errorapertura);
 }
@@ -56,22 +71,31 @@ void GRAFO::actualizar(char nombrefichero[85], int& errorapertura) {
   build(nombrefichero, errorapertura);
 }
 
-unsigned GRAFO::Es_dirigido() {}
+// @return: 1 si es dirigido, 0 si no es dirigido
+unsigned GRAFO::Es_dirigido() { return dirigido; }
 
-void GRAFO::Info_Grafo() {}
+void GRAFO::Info_Grafo() {
+  std::cout << "nodos: " << n << std::endl;
+  std::cout << "arcos: " << m << std::endl;
+  if (Es_dirigido() == 1) {
+    std::cout << "Es dirigido" << std::endl;
+  } else {
+    std::cout << "No es dirigido" << std::endl;
+  }
+}
 
 void Mostrar_Lista(vector<LA_nodo> L) {}
 
 void GRAFO ::Mostrar_Listas(int l) {}
 
-void ListaPredecesores()  // Recorre la lista de sucesores LS para construir la
-                          // de predecesores, LP
-{}
+// Recorre la lista de sucesores LS para construir
+// la de predecesores, LP
+void ListaPredecesores() {}
 
 void GRAFO::dfs_cc(
     unsigned i,
-    vector<bool>& visitado)  // Este recorrido esta� hecho adhoc para mostrar el
-                             // ritmo de nodos visitados, para su uso en la
+    vector<bool>& visitado)  // Este recorrido esta� hecho adhoc para mostrar
+                             // el ritmo de nodos visitados, para su uso en la
                              // construccion de Componentes Conexas
 {}
 
@@ -86,8 +110,8 @@ void GRAFO::dfs_cfc(
 
 void GRAFO::dfs_postnum(
     unsigned i, vector<bool>& visitado, vector<unsigned>& postnum,
-    unsigned& postnum_ind)  // Este recorrido esta� hecho adhoc para calcular el
-                            // orden postnumeraci�n de los nodos
+    unsigned& postnum_ind)  // Este recorrido esta� hecho adhoc para calcular
+                            // el orden postnumeraci�n de los nodos
 {}
 
 void GRAFO::ComponentesFuertementeConexas() {}

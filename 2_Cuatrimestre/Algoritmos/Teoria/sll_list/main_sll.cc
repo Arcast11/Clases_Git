@@ -91,5 +91,24 @@ int main(void) {
        << endl;
   lista.write(cout);
   cout << endl;
+
+  // prueba metodo ordened_merge
+  sll_t<char> lista1;
+  sll_t<char> lista2;
+  for (int i = 0; i < N_CHARS; i++) {
+    lista1.push_front(new sll_node_t<char>('a' + i));
+    lista2.push_front(new sll_node_t<char>('A' + i));
+  }
+  cout << "Lista 1: " << endl;
+  lista1.write(cout);
+  cout << endl;
+  cout << "Lista 2: " << endl;
+  lista2.write(cout);
+  cout << endl;
+  sll_t<char> lista3;
+  lista3.ordened_merge(lista1, lista2);
+  cout << "Lista resultante de la mezcla ordenada de lista1 y lista2: " << endl;
+  lista3.write(cout);
+  cout << endl;
   return 0;
 }

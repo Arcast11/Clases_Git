@@ -42,6 +42,8 @@ class sll_t {
 
   sll_node_t<T>* search(const T&) const;
 
+  void ordened_merge(const sll_t<T>&, const sll_t<T>&);
+
   // metodo auxilar
 
   sll_node_t<T>* tail(void);
@@ -153,6 +155,32 @@ sll_node_t<T>* sll_t<T>::extract_tail(void) {
   }
 
   return aux;
+}
+
+template <class T>
+void sll_t<T>::ordened_merge(const sll_t<T>& l1, const sll_t<T>& l2) {
+  sll_node_t<T>* aux1 = l1.get_head();
+  sll_node_t<T>* aux2 = l2.get_head();
+
+  while (aux1 != NULL && aux2 != NULL) {
+    if (aux1->get_data() < aux2->get_data()) {
+      push_front(new sll_node_t<T>(aux1->get_data()));
+      aux1 = aux1->get_next();
+    } else {
+      push_front(new sll_node_t<T>(aux2->get_data()));
+      aux2 = aux2->get_next();
+    }
+  }
+
+  while (aux1 != NULL) {
+    push_front(new sll_node_t<T>(aux1->get_data()));
+    aux1 = aux1->get_next();
+  }
+
+  while (aux2 != NULL) {
+    push_front(new sll_node_t<T>(aux2->get_data()));
+    aux2 = aux2->get_next();
+  }
 }
 
 // E/S
