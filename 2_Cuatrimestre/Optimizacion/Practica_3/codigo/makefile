@@ -39,4 +39,4 @@ debug: $(EXEC)
 .PHONY: all clean run debug
 
 clean:
-	rm -f $(OBJS) $(EXEC) *~
+	rm -f $(EXEC)

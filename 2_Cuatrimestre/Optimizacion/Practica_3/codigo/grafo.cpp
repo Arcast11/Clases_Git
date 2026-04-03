@@ -35,6 +35,9 @@ void GRAFO ::build(char nombrefichero[85], int& errorapertura) {
     // leemos los m arcos
     for (k = 0; k < m; k++) {
       textfile >> (unsigned&)i >> (unsigned&)j >> (int&)dummy.c;
+
+      i--;
+      j--;
       // damos los valores a dummy.j y dummy.c
       dummy.j = j;
       // situamos en la posici�n del nodo i a dummy mediante push_back
@@ -84,9 +87,28 @@ void GRAFO::Info_Grafo() {
   }
 }
 
-void Mostrar_Lista(vector<LA_nodo> L) {}
+void Mostrar_Lista(vector<LA_nodo> L) {
+  for (unsigned i{0}; i < L.size(); i++) {
+    cout << "Nodo [" << i + 1 << "] ->";
+    for (unsigned k{0}; k < L[i].size(); k++) {
+      cout << L[i][k].j + 1 << " " << L[i][k].c;
+    }
+    cout << endl;
+  }
+}
 
-void GRAFO ::Mostrar_Listas(int l) {}
+void GRAFO ::Mostrar_Listas(int l) {
+  if (l == 0) {  // Es no dirigido
+    // Mostramos lista de adyacencia
+    Mostrar_Lista(LS);
+  } else if (l == 1) {
+    // Mostrar lista de sucesores
+    Mostrar_Lista(LS);
+  } else if (l == -1) {
+    // Mostrar lista de predecesores
+    Mostrar_Lista(LP);
+  }
+}
 
 // Recorre la lista de sucesores LS para construir
 // la de predecesores, LP

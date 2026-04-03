@@ -93,7 +93,32 @@ int main(int argc, char* argv[]) {
           clrscr();
           break;
 
-          // Situar aqu� el resto de opciones del men�
+        case 'a':
+        case 's':
+          clrscr();
+          if (G.Es_dirigido() == 1) {
+            cout << "Lista de Sucesores:" << endl;
+            G.Mostrar_Listas(1);
+          } else {
+            cout << "Lista de Adyacencia:" << endl;
+            G.Mostrar_Listas(0);
+          }
+          pressanykey();
+          clrscr();
+          break;
+
+        case 'p':
+          clrscr();
+          if (G.Es_dirigido() == 1) {
+            cout << "Lista de Predecesores:" << endl;
+            G.Mostrar_Listas(-1);
+          } else {
+            cout << "El grafo no es dirigido, no tiene lista de predecesores."
+                 << endl;
+          }
+          pressanykey();
+          clrscr();
+          break;
       }
     } while (opcion != 'q');
   }
