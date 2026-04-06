@@ -10,7 +10,8 @@
 
 void GRAFO ::destroy() {
   for (unsigned i = 0; i < n; i++) {
-    LS[i].clear();
+    LS[i].clear();  // 1. Limpiamos y preparamos el vector LP con el tamaño
+                    // adecuado (n nodos)
     if (dirigido == 1) LP[i].clear();
   }
   LS.clear();
@@ -23,37 +24,31 @@ void GRAFO ::build(char nombrefichero[85], int& errorapertura) {
   textfile.open(nombrefichero);
   if (textfile.is_open()) {
     unsigned i, j, k;
-    // leemos por conversion implicita el numero de nodos, arcos y el atributo
-    // dirigido
     textfile >> (unsigned&)n >> (unsigned&)m >> (unsigned&)dirigido;
-    // los nodos internamente se numeran desde 0 a n-1
-    // creamos las n listas de sucesores
+
+    // Reservamos espacio para n nodos en LS, y, en su caso, en LP
     LS.resize(n);
-    if (dirigido == 1) {
-      LP.resize(n);
-    }
-    // leemos los m arcos
+
+    // Leemos los m arcos
     for (k = 0; k < m; k++) {
       textfile >> (unsigned&)i >> (unsigned&)j >> (int&)dummy.c;
-
       i--;
       j--;
-      // damos los valores a dummy.j y dummy.c
+
       dummy.j = j;
-      // situamos en la posici�n del nodo i a dummy mediante push_back
       LS[i].push_back(dummy);
-      // hacer un segundo push_back si es no dirigido. O no.
-      if (dirigido == 1) {
-        // construcci�n de LP, si es dirigido
-        dummy.j = i;
-        LP[j].push_back(dummy);
-      } else {
+
+      // Si el grafo es NO dirigido, añadimos el arco en ambas direcciones en LS
+      if (dirigido == 0) {
         dummy.j = i;
         LS[j].push_back(dummy);
       }
     }
+    // construimos LP
+    if (dirigido == 1) {
+      ListaPredecesores();
+    }
 
-    // valor a devolver en errorapertura
     errorapertura = 0;
     textfile.close();
   } else {
@@ -91,7 +86,7 @@ void Mostrar_Lista(vector<LA_nodo> L) {
   for (unsigned i{0}; i < L.size(); i++) {
     cout << "Nodo [" << i + 1 << "] ->";
     for (unsigned k{0}; k < L[i].size(); k++) {
-      cout << L[i][k].j + 1 << " " << L[i][k].c;
+      cout << " " << L[i][k].j + 1 << " " << L[i][k].c << " | ";
     }
     cout << endl;
   }
@@ -112,7 +107,26 @@ void GRAFO ::Mostrar_Listas(int l) {
 
 // Recorre la lista de sucesores LS para construir
 // la de predecesores, LP
-void ListaPredecesores() {}
+void GRAFO::ListaPredecesores() {
+  LP.clear();
+  LP.resize(n);
+
+  ElementoLista dummy;
+
+  // 2. Recorremos toda la Lista de Sucesores (LS)
+  for (unsigned i = 0; i < LS.size(); i++) {
+    for (unsigned k = 0; k < LS[i].size(); k++) {
+      // En LS, el nodo 'i' apunta a 'LS[i][k].j' con un coste 'LS[i][k].c'.
+      // Para invertirlo en LP: el nodo 'LS[i][k].j' recibe una flecha desde
+      // 'i'.
+      dummy.j = i;
+      dummy.c = LS[i][k].c;  // Mantenemos el coste original del arco
+
+      // Lo guardamos en la lista de predecesores del nodo destino
+      LP[LS[i][k].j].push_back(dummy);
+    }
+  }
+}
 
 void GRAFO::dfs_cc(
     unsigned i,
