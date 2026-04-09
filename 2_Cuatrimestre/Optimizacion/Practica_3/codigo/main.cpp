@@ -2,8 +2,8 @@
  *  Programa principal.
  *
  *
- *               Autores : Antonio Sedeno Noda, Sergio Alonso.
- *               Cursos  : 2012-2026
+ *               Autores : Antonio Sedeno Noda, Sergio Alonso, Armando Castro.
+ *               Cursos  : 2025-2026
  */
 
 #include <string.h>
@@ -21,18 +21,18 @@ void pressanykey() {
 void menu(unsigned dirigido, char& opcion)
 // Expresion del menu de opciones segun sea un grafo dirigido o no dirigido
 {
-  cout << "Optimiza!cion en Grafos, 2025-2026 NOMBRE DEL ESTUDIANTE" << endl;
+  cout << "Optimiza!cion en Grafos, 2025-2026 Armando Castro" << endl;
   cout << "c. [c]argar grafo desde fichero" << endl;
   if (dirigido == 0)  // Grafo no dirigido
   {
     cout << "i. Mostrar [i]nformacion basica del grafo" << endl;
     cout << "a. Mostrar la lista de [a]dyacencia del grafo" << endl;
-    // Aqu� se a�aden m�s opciones al men� del grafo no dirigido
+    cout << "o. Mostrar c[o]mponentes conexas del grafo" << endl;
   } else {
     cout << "i. Mostrar [i]nformacion basica del grafo" << endl;
     cout << "s. Mostrar la lista de [s]ucesores del grafo" << endl;
     cout << "p. Mostrar la lista de [p]redecesores del grafo" << endl;
-    // Aqu� se a�aden m�s opciones al men� del grafo dirigido
+    cout << "o. Mostrar c[o]mponentes fuertemente conexas del grafo" << endl;
   };
   cout << "q. Finalizar el programa" << endl;
   cout << "Introduce la letra de la accion a ejecutar  > ";
@@ -94,14 +94,16 @@ int main(int argc, char* argv[]) {
           break;
 
         case 'a':
+          clrscr();
+          cout << "Lista de Adyacencia:" << endl;
+          G.Mostrar_Listas(0);
+          break;
+
         case 's':
           clrscr();
           if (G.Es_dirigido() == 1) {
             cout << "Lista de Sucesores:" << endl;
             G.Mostrar_Listas(1);
-          } else {
-            cout << "Lista de Adyacencia:" << endl;
-            G.Mostrar_Listas(0);
           }
           pressanykey();
           clrscr();
@@ -118,6 +120,21 @@ int main(int argc, char* argv[]) {
           }
           pressanykey();
           clrscr();
+          break;
+
+        case 'o':
+          clrscr();
+          if (G.Es_dirigido() == 1) {
+            cout << "Componentes fuertemente conexas del grafo:";
+            G.ComponentesFuertementeConexas();
+          } else {
+            cout << "Componentes conexas del grafo:" << endl;
+            G.ComponentesConexas();
+          }
+          cout << endl;
+          pressanykey();
+          clrscr();
+
           break;
       }
     } while (opcion != 'q');

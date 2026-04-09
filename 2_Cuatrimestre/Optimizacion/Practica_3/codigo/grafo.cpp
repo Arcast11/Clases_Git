@@ -128,26 +128,91 @@ void GRAFO::ListaPredecesores() {
   }
 }
 
-void GRAFO::dfs_cc(
-    unsigned i,
-    vector<bool>& visitado)  // Este recorrido esta� hecho adhoc para mostrar
-                             // el ritmo de nodos visitados, para su uso en la
-                             // construccion de Componentes Conexas
-{}
+void GRAFO::dfs_cc(unsigned i, vector<bool>& visitado) {
+  // Este recorrido esta� hecho adhoc para mostrar el ritmo de nodos visitados,
+  // para su uso en la construccion de Componentes Conexas
+  visitado[i] = true;  // visitamos el nodo i + 1
+  cout << i + 1;
+  for (unsigned j = 0; j < LS[i].size(); j++) {
+    // recorremos la adyacencia del nodo visitado, esto es, i + 1
+    cout << i + 1;
+    if (!visitado[LS[i][j].j]) {
+      cout << " , ";
+      GRAFO::dfs_cc(LS[i][j].j, visitado);
+    }
+  }
+}
 
-void GRAFO::ComponentesConexas() {}
+void GRAFO::ComponentesConexas() {
+  unsigned i, componentes_conexas = 0;
+  vector<bool> visitado;
+  visitado.resize(n, false);
+  i = 0;
+  while (i < n) {
+    if (!visitado[i]) {
+      componentes_conexas++;
+      cout << " componente conexa " << "{:";
+      dfs_cc(i, visitado);
+    }
+    i++;
+  }
+}
 
-void GRAFO::dfs_cfc(
-    unsigned i,
-    vector<bool>& visitado)  // Este recorrido esta� hecho adhoc para mostrar el
-                             // ritmo de nodos visitados, para su uso en la
-                             // construccion de Componentes fuertemente Conexas
-{}
+void GRAFO::dfs_cfc(unsigned i, vector<bool>& visitado) {
+  // Este recorrido esta� hecho adhoc para mostrar el ritmo de nodos visitados,
+  // para su uso en la construccion de Componentes fuertemente Conexas
+  visitado[i] = true;  // visitamos el nodo i + 1
+  cout << i + 1;
+  for (unsigned j = 0; j < LP[i].size(); j++) {
+    // recorremos la adyacencia del nodo visitado, esto es, i + 1
+    if (!visitado[LP[i][j].j]) {
+      cout << " , ";
+      GRAFO::dfs_cfc(LP[i][j].j, visitado);
+    }
+  }
+}
 
-void GRAFO::dfs_postnum(
-    unsigned i, vector<bool>& visitado, vector<unsigned>& postnum,
-    unsigned& postnum_ind)  // Este recorrido esta� hecho adhoc para calcular
-                            // el orden postnumeraci�n de los nodos
-{}
+void GRAFO::dfs_postnum(unsigned i, vector<bool>& visitado,
+                        vector<unsigned>& postnum, unsigned& postnum_ind) {
+  // Este recorrido esta� hecho adhoc para calcular
+  // el orden postnumeraci�n de los nodos
+  visitado[i] = true;
+  for (unsigned j = 0; j < LS[i].size(); j++) {
+    // recorremos la adyacencia del nodo visitado, esto es, i + 1
+    if (visitado[LS[i][j].j] == false) {
+      dfs_postnum(LS[i][j].j, visitado, postnum, postnum_ind);
+    }
+  }
+  postnum[postnum_ind--] = i;
+}
 
-void GRAFO::ComponentesFuertementeConexas() {}
+void GRAFO::ComponentesFuertementeConexas() {
+  unsigned i, postnum_ind, componentes_fuertemente_conexas = 0;
+  vector<bool> visitado;
+  vector<unsigned> postnum;
+
+  visitado.resize(n, false);
+  postnum.resize(n, UERROR);
+
+  postnum_ind = n - 1;
+  i = 0;
+
+  while (i < n) {
+    if (visitado[i] == false) {
+      dfs_postnum(i, visitado, postnum, postnum_ind);
+    }
+    i++;
+  }
+  visitado.assign(n, false);
+  i = 0;
+  while (i < n) {
+    if (visitado[postnum[i]] == false) {
+      componentes_fuertemente_conexas++;
+      cout << "\nComponente Fuertemente Conexa"
+           << componentes_fuertemente_conexas << ":{";
+      dfs_cfc(postnum[i], visitado);
+      cout << "}";
+    }
+    i++;
+  }
+}
