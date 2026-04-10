@@ -1,11 +1,11 @@
-// AUTOR: 
-// FECHA: 
-// EMAIL: 
+// AUTOR:
+// FECHA:
+// EMAIL:
 // VERSION: 1.0
 // ASIGNATURA: Algoritmos y Estructuras de Datos
 // PRÁCTICA Nº: 4
 // ESTILO: Google C++ Style Guide
-// COMENTARIOS: 
+// COMENTARIOS:
 // COMPILACIÓN: g++ -g main_sllpolynomial.cc -o main_sllpolynomial
 // EJECUCIÓN: ./main_sllpolynomial < data_sllpolynomial.txt
 
@@ -15,8 +15,7 @@
 
 using namespace std;
 
-int main()
-{
+int main() {
   vector_t<double> v1, v2, v3;
   cin >> v1 >> v2 >> v3;
   cout << "v1= " << v1;
