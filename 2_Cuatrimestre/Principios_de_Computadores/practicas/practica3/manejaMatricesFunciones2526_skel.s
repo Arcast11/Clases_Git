@@ -350,12 +350,14 @@ cadMax:         .asciiz "\nEl valor maximo en la matriz es "
 cadFin:         .asciiz "\n\nTermina el programa\n"
 
 
+
 # void print_mat(structMat* mat) {
-# Oarñanetros de entrada
+# Parámetros de entrada
 # structMat* mat → $a0 → $s0
 # parametros de salida: ninguno
 
 # Esta función llama a otra: NECESITA USAR LA PILA
+# Tabla de asignación de registros
 # int nFil → $s1
 # int nCol → $s2
 # double* datos → $s4
@@ -364,97 +366,300 @@ cadFin:         .asciiz "\n\nTermina el programa\n"
 
 print_mat:
 
-        #PUSH: $RA, $S0, $S2, $S3, $S54, $S5, $S6, $S8: 7 * 4 = 28
-        addi    $sp,$sp, -28
-        sw      $ra, 0($sp)
-        sw      $s0, 4($sp)
-        sw      $s1, 8($sp)
-        sw      $s2, 12($sp)
-        sw      $s4, 16($sp)
-        sw      $s5, 20($sp)
-        sw      $s6, 24($sp)
-        sw      $s8, 28($sp)
+	#PUSH: $RA, $S0, $S1, $S2, $S4, $S5, $S8: 7 * 4 = 28
+	addi	$sp,$sp, -28
+	sw	$ra, 0($sp)
+	sw	$s0, 4($sp)
+	sw	$s1, 8($sp)
+	sw	$s2, 12($sp)
+	sw	$s4, 16($sp)
+	sw	$s5, 20($sp)
+	sw	$s8, 24($sp)
 
-        move    $s0,$a0
+	move	$s0,$a0
 
 #   int nFil = mat->nFil;
-        lw      $s1,nfil($s0)
+	lw	$s1,nFil($s0)
 
 #   int nCol = mat->nCol;
-        lw      $s2,ncol($s0)
+	lw	$s2,nCol($s0)
 
 #   double* datos = mat->elementos;
-        la      $s4,elementos(s0)
+	la	$s4,elementos($s0)
 
 #   std::cout << "\n\nLa matriz tiene dimension " << nFil
 #       << 'x' << nCol << '\n';
+	li	$v0,4
+	la	$a0,cadDim
+	syscall			#Imprime la cadena cadDim
+	
+	li	$v0,1
+	move	$a0, $s1
+	syscall			# Imprime nfil
+	
+	li	$v0,11
+	li	$a0,'x'
+	syscall			# Imprime el carácter x
+	
+	li	$v0,1
+	move	$a0, $s2
+	syscall			# Imprime ncol
+	
+	li	$v0,11
+	li	$a0,'\n'
+	syscall
 
 #   for(int f =: 0; f < nFil; f++) {
+	move $s5,$zero
+
 print_mat_for_f:
+	bge	$s5, $s1,print_mat_for_f_fin
 
 #     for(int c = 0; c < nCol; c++) {
+	move $s8,$zero
+	
 print_mat_for_c:
+	bge	$s8,$s2,print_mat_for_c_fin
 
 #       std::cout << datos[f*nCol + c] << ' ';  // datos[f][c]
 
-        # dirección datos[f][c] → $t1
-        mul     $t1,$s5,$s2
-        add     $t1,$t1,$S8
-        mul     $t1,$t1,tamD
-        add     $t1,$s4,$t1
+	# dirección datos[f][c] → $t1
+	mul	$t1,$s5,$s2
+	add	$t1,$t1,$s8
+	mul	$t1,$t1,tamD
+	add	$t1,$s4,$t1
 
-        li      $v0,3
-        l.d     $f12,0($t1)
-        syscall
+	li	$v0,3
+	l.d	$f12,0($t1)
+	syscall
+	
+	li	$v0,11
+	li	$a0,' '
+	syscall
+	
+	addi	$s8,$s8,1
+	j	print_mat_for_c
         
 #     }
-
+print_mat_for_c_fin:
 #     std::cout << '\n';
+	li	$v0,11
+	li	$a0,'\n'
+	syscall
+	
+	addi	$s5,$s5,1
+	j	print_mat_for_f
 #   }
+print_mat_for_f_fin:
+
 #   std::cout << '\n';
+	li	$v0,11
+	li	$a0,'\n'
+	syscall
 # }
-        lw      $ra, 0($sp)
-        lw      $s0, 4($sp)
-        lw      $s1, 8($sp)
-        lw      $s2, 12($sp)
-        lw      $s4, 16($sp)
-        lw      $s5, 20($sp)
-        lw      $s6, 24($sp)
-        lw      $s8, 28($sp)
-        addi    $sp,$sp, 28
 
+	lw	$ra, 0($sp)
+	lw	$s0, 4($sp)
+	lw	$s1, 8($sp)
+	lw	$s2, 12($sp)
+	lw	$s4, 16($sp)
+	lw	$s5, 20($sp)
+	lw	$s8, 24($sp)
+	addi	$sp,$sp, 28
 
-        jr  $ra
+	jr	$ra
 
 print_mat__MARCAFIN:
 
 # void change_elto(structMat* mat, int indF, int indC, double valor) {
+# Parámetros de entrada:
+# structMat* mat → $a0
+# int indF → $a1
+# int indC → $a2
+# double valor → $f12
+# Parámetros de salida: ninguno
+
+# Función no llama a otra: NO NECESITA USAR LA PILA
+# Tabla de variables a registros
+# int numCol → $t0
+# double* datos → $t1
+
+change_elto:
+
 #   int numCol = mat->nCol;
+	lw	$t0,nCol($a0)
 #   double* datos = mat->elementos;
+	addi	$t1,$a0,elementos
 #   datos[indF * numCol + indC] = valor;  // datos[indF][indC]
+
+	#Dirección de datos → $t1
+	mul	$t4,$a1,$t0
+	add	$t4,$t4,$a2
+	mul	$t4,$t4,tamD
+	add	$t4,$t1,$t4
+	
+	s.d	$f12,0($t4)
 # }
+	jr	$ra
+change_elto__MARCAFIN:
 
 # void swap(double* e1, double* e2) {
+# Parámetros de entrada:
+# double* e1 → $a0
+# double* e2 → $a1
+# Parámetros de salida: ninguno
+
+# Función NO llama a otra: NO NECESITA USAR LA PILA
+# Tabla de variables a registros 
+# double temp1 → $f10
+# double temp2 → $f18
+
+swap:
+
 #   double temp1 = *e1;
+	l.d	$f10,0($a0)
 #   double temp2 = *e2;
+	l.d	$f18,0($a1)
+	
 #   *e1 = temp2;
+	s.d 	$f18,0($a0)
 #   *e2 = temp1;
+	s.d 	$f10,0($a1)
 # }
+	jr	$ra
+swap__MARCAFIN:
+
 
 # void intercambia(structMat* mat, int indF, int indC) {
+# Parámetros de entrada:
+# strucMat* 	→ $a0 → $s0
+# int indF 	→ $a1 → $s1
+# int indC 	→ $a1 → $s2
+# 
+# Esta función llama a otra: NECESITA USAR LA PILA
+# Tabla de asignación de registros
+# int numCol 	→ $s3
+# int numFil 	→ $s4
+# double* datos	→ $s5
+# double* e1 	→ $t4
+# double* e1 	→ $t
+
+
+
+# void intercambia(structMat* mat, int indF, int indC) {
+# Parámetros de entrada:
+# structMat* mat	→ $a0 → $s0
+# int indF		→ $a1 → $s1
+# int indC		→ $a2 → $s2
+
+# Esta función llama a otra: NECESITA USAR LA PILA
+# Tabla de asignación de registros
+# int numCol		→ $s3
+# int numFil		→ $s4
+# double* datos		→ $s5
+# double* e1		→ $t4
+# double* e2		→ $t5
+
+intercambia:
+    # PUSH: $ra, $s0, $s1, $s2, $s3, $s4, $s5 (7 registros * 4 bytes = 28 bytes)
+   
+	addi	$sp, $sp, -28
+	sw	$ra, 0($sp)
+	sw	$s0, 4($sp)
+	sw	$s1, 8($sp)
+	sw	$s2, 12($sp)
+	sw	$s3, 16($sp)
+	sw	$s4, 20($sp)
+	sw	$s5, 24($sp)
+
+	move	$s0, $a0	# mat
+	move	$s1, $a1	# indF
+	move	$s2, $a2	# indC
+
 #   int numCol = mat->nCol;
+	lw	$s3, nCol($s0)
+
 #   int numFil = mat->nFil;
+	lw	$s4, nFil($s0)
+    
 #   double* datos = mat->elementos;
+	addi	$s5, $s0, elementos # Dirección donde empieza el array de la matriz
+
 #   // e1 = &(datos[indF][indC]);
 #   double* e1 = datos + (indF * numCol + indC);
+	mul	$t0, $s1, $s3	# $t0 = indF * numCol
+	add	$t0, $t0, $s2	# $t0 = indF * numCol + indC
+	mul	$t0, $t0, tamD	# 
+	add	$t4, $s5, $t0	# $t4 = dirección de memoria de e1
+
 #   int indFilaOpuesta = (numFil - indF - 1);
+	sub	$t1, $s4, $s1	# numFil - indF
+		$t1, $t1, -1	# indFilaOpuesta
+
 #   int indColOpuesta = (numCol - indC - 1);
-#   // e1 = &(datos[indFilaOpuesta][indColOpuesta])
+	sub	$t2, $s3, $s2	# numCol - indC
+	addi	$t2, $t2, -1	# indColOpuesta
+
+#   // e2 = &(datos[indFilaOpuesta][indColOpuesta])
 #   double* e2 = datos + (indFilaOpuesta * numCol + indColOpuesta);
+	mul	$t3, $t1, $s3	# indFilaOpuesta * numCol
+	add	$t3, $t3, $t2	# + indColOpuesta
+	mul	$t3, $t3, tamD	
+	add	$t5, $s5, $t3
+
 #   swap(e1, e2);
+	# Paso como parametros e1 y e2
+	move	$a0, $t4	# Paso dirección de e1
+	move	$a1, $t5	# Paso dirección de e2
+	jal	swap		# Llamo a la función swap
+
 # }
+	# POP: $ra, $s0, $s1, $s2, $s3, $s4, $s5
+
+	lw	$ra, 0($sp)
+	lw	$s0, 4($sp)
+	lw	$s1, 8($sp)
+	lw	$s2, 12($sp)
+	lw	$s3, 16($sp)
+	lw	$s4, 20($sp)
+	lw	$s5, 24($sp)
+	addi	$sp, $sp, 28
+
+	jr	$ra
+
+intercambia__MARCAFIN:
 
 # void procesa_cols(structMat* mat, int indC1, int indC2) {
+# Parámetros de Entrada
+# structMat* mat	→ $a0
+# int indC1		→ $a1
+# int indC2		→ $a2
+
+# Esta función llama a otra: Necesita usar la pila
+# Tabla de asignación de registros
+# int numCol		→ $s0
+# int numFil		→ $s1
+# double* datos		→ $s2
+# int fa		→ $s3
+# double* e1		→ $s4
+# double* e2		→ $s5
+# double val1		→ $s7
+# double val2		→ $s8
+
+procesa_cols:
+
+	# PUSH: $ra, $s0, $s1, $s2, $s3, $s4, $s5, $s6, $s7 (9 * 4 = 36)
+	addi	$sp, $sp, -36
+	sw	$ra, 0($sp)
+	sw	$s0, 4($sp)
+	sw	$s1, 8($sp)
+	sw	$s2, 12($sp)
+	sw	$s3, 16($sp)
+	sw	$s4, 20($sp)
+	sw	$s5, 24($sp)
+	sw	$s6, 28($sp)
+	sw	$s7, 32($sp)
+	
 #   int numCol = mat->nCol;
 #   int numFil = mat->nFil;
 #   double* datos = mat->elementos;
@@ -473,8 +678,23 @@ print_mat__MARCAFIN:
 #     *e2 = *e2 + 0.5625;
 #   }
 # }
+	# POP: $ra, $s0, $s1, $s2, $s3, $s4, $s5, $s6, $s7 (9 * 4 = 36)
+	sw	$ra, 0($sp)
+	sw	$s0, 4($sp)
+	sw	$s1, 8($sp)
+	sw	$s2, 12($sp)
+	sw	$s3, 16($sp)
+	sw	$s4, 20($sp)
+	sw	$s5, 24($sp)
+	sw	$s6, 28($sp)
+	sw	$s7, 32($sp)
+	addi	$sp, $sp, 36
+
+	jr	$ra
+procesa_cols__MARCAFIN:
 
 # double find_max(structMat* mat) {
+
 #   int numCol = mat->nCol;
 #   int numFil = mat->nFil;
 #   double* datos = mat->elementos;
