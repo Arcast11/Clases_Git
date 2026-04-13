@@ -21,7 +21,7 @@ void pressanykey() {
 void menu(unsigned dirigido, char& opcion)
 // Expresion del menu de opciones segun sea un grafo dirigido o no dirigido
 {
-  cout << "Optimiza!cion en Grafos, 2025-2026 Armando Castro" << endl;
+  cout << "Optimizacion en Grafos, 2025-2026 Armando Castro" << endl;
   cout << "c. [c]argar grafo desde fichero" << endl;
   if (dirigido == 0)  // Grafo no dirigido
   {
@@ -97,6 +97,8 @@ int main(int argc, char* argv[]) {
           clrscr();
           cout << "Lista de Adyacencia:" << endl;
           G.Mostrar_Listas(0);
+          pressanykey();
+          clrscr();
           break;
 
         case 's':

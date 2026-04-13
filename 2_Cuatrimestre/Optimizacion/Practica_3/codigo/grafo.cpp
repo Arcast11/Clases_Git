@@ -26,7 +26,7 @@ void GRAFO ::build(char nombrefichero[85], int& errorapertura) {
     unsigned i, j, k;
     textfile >> (unsigned&)n >> (unsigned&)m >> (unsigned&)dirigido;
 
-    // Reservamos espacio para n nodos en LS, y, en su caso, en LP
+    // Reservamos espacio para n nodos en LS, y, en su caso,
     LS.resize(n);
 
     // Leemos los m arcos
@@ -135,7 +135,6 @@ void GRAFO::dfs_cc(unsigned i, vector<bool>& visitado) {
   cout << i + 1;
   for (unsigned j = 0; j < LS[i].size(); j++) {
     // recorremos la adyacencia del nodo visitado, esto es, i + 1
-    cout << i + 1;
     if (!visitado[LS[i][j].j]) {
       cout << " , ";
       GRAFO::dfs_cc(LS[i][j].j, visitado);
@@ -151,8 +150,9 @@ void GRAFO::ComponentesConexas() {
   while (i < n) {
     if (!visitado[i]) {
       componentes_conexas++;
-      cout << " componente conexa " << "{:";
+      cout << " \nComponente conexa " << componentes_conexas << "{:";
       dfs_cc(i, visitado);
+      cout << " }";
     }
     i++;
   }
@@ -167,7 +167,7 @@ void GRAFO::dfs_cfc(unsigned i, vector<bool>& visitado) {
     // recorremos la adyacencia del nodo visitado, esto es, i + 1
     if (!visitado[LP[i][j].j]) {
       cout << " , ";
-      GRAFO::dfs_cfc(LP[i][j].j, visitado);
+      dfs_cfc(LP[i][j].j, visitado);
     }
   }
 }
@@ -179,7 +179,7 @@ void GRAFO::dfs_postnum(unsigned i, vector<bool>& visitado,
   visitado[i] = true;
   for (unsigned j = 0; j < LS[i].size(); j++) {
     // recorremos la adyacencia del nodo visitado, esto es, i + 1
-    if (visitado[LS[i][j].j] == false) {
+    if (!visitado[LS[i][j].j]) {
       dfs_postnum(LS[i][j].j, visitado, postnum, postnum_ind);
     }
   }
@@ -208,7 +208,7 @@ void GRAFO::ComponentesFuertementeConexas() {
   while (i < n) {
     if (visitado[postnum[i]] == false) {
       componentes_fuertemente_conexas++;
-      cout << "\nComponente Fuertemente Conexa"
+      cout << "\nComponente Fuertemente Conexa "
            << componentes_fuertemente_conexas << ":{";
       dfs_cfc(postnum[i], visitado);
       cout << "}";
