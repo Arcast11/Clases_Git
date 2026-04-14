@@ -41,6 +41,9 @@ class SllPolynomial : public sll_t<pair_double_t> {
   double Eval(const double) const;
   bool IsEqual(const SllPolynomial&, const double = EPS) const;
   void Sum(const SllPolynomial&, SllPolynomial&, const double = EPS);
+
+  // Modificación
+  double get_monomio(int);
 };
 
 bool IsNotZero(const double val, const double eps = EPS) {
@@ -168,6 +171,22 @@ void SllPolynomial::Sum(const SllPolynomial& sllpol, SllPolynomial& sllpolsum,
       }
     }
   }
+}
+
+// Módificación
+
+double SllPolynomial::get_monomio(int grado) {
+  SllPolyNode* aux_node = get_head();
+  double coeficiente = 0;
+
+  while (aux_node != NULL) {
+    if (aux_node->get_data().get_inx() == grado) {
+      coeficiente = aux_node->get_data().get_val();
+      break;
+    }
+    aux_node = aux_node->get_next();
+  }
+  return coeficiente;
 }
 
 #endif  // SLLPOLYNOMIAL_H_

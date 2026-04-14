@@ -71,5 +71,10 @@ int main() {
   sllp2.Sum(sllp3, sllpsum23);
   cout << "sllp2 + sllp3= " << sllpsum23;
 
+  // Módificación
+
+  cout << "Monomio grado 2 de sllp1: " << sllp1.get_monomio(1) << endl;
+  cout << "Monomio grado 2 de sllp2: " << sllp2.get_monomio(3) << endl;
+
   return 0;
 }
