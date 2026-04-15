@@ -438,7 +438,7 @@ print_mat_for_c:
 	syscall
 	
 	addi	$s8,$s8,1
-	j	print_mat_for_c
+	b	print_mat_for_c
         
 #     }
 print_mat_for_c_fin:
@@ -448,7 +448,7 @@ print_mat_for_c_fin:
 	syscall
 	
 	addi	$s5,$s5,1
-	j	print_mat_for_f
+	b	print_mat_for_f
 #   }
 print_mat_for_f_fin:
 
@@ -489,7 +489,7 @@ change_elto:
 #   int numCol = mat->nCol;
 	lw	$t0,nCol($a0)
 #   double* datos = mat->elementos;
-	addi	$t1,$a0,elementos
+	la	$t1,elementos($a0)
 #   datos[indF * numCol + indC] = valor;  // datos[indF][indC]
 
 	#Dirección de datos → $t1
@@ -583,7 +583,7 @@ intercambia:
 	lw	$s4, nFil($s0)
     
 #   double* datos = mat->elementos;
-	addi	$s5, $s0, elementos # Dirección donde empieza el array de la matriz
+	la	$s5,elementos($s0) 
 
 #   // e1 = &(datos[indF][indC]);
 #   double* e1 = datos + (indF * numCol + indC);
