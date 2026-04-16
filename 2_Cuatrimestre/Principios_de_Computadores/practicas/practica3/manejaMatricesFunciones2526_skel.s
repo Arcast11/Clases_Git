@@ -572,7 +572,7 @@ intercambia:
 	sw	$s4, 20($sp)
 	sw	$s5, 24($sp)
 
-	move	$s0, $a0	# mat
+	move	$s0, $a0	# mat*
 	move	$s1, $a1	# indF
 	move	$s2, $a2	# indC
 
@@ -583,7 +583,7 @@ intercambia:
 	lw	$s4, nFil($s0)
     
 #   double* datos = mat->elementos;
-	la	$s5,elementos($s0) 
+	la	$s5,elementos($s0)
 
 #   // e1 = &(datos[indF][indC]);
 #   double* e1 = datos + (indF * numCol + indC);
@@ -594,7 +594,7 @@ intercambia:
 
 #   int indFilaOpuesta = (numFil - indF - 1);
 	sub	$t1, $s4, $s1	# numFil - indF
-		$t1, $t1, -1	# indFilaOpuesta
+	addi	$t1, $t1, -1	# indFilaOpuesta
 
 #   int indColOpuesta = (numCol - indC - 1);
 	sub	$t2, $s3, $s2	# numCol - indC
@@ -631,25 +631,25 @@ intercambia__MARCAFIN:
 
 # void procesa_cols(structMat* mat, int indC1, int indC2) {
 # Parámetros de Entrada
-# structMat* mat	→ $a0
-# int indC1		→ $a1
-# int indC2		→ $a2
+# structMat* mat	→ $a0 → $s0
+# int indC1		→ $a1 → $s1
+# int indC2		→ $a2 → $s2
 
 # Esta función llama a otra: Necesita usar la pila
 # Tabla de asignación de registros
-# int numCol		→ $s0
-# int numFil		→ $s1
-# double* datos		→ $s2
-# int fa		→ $s3
-# double* e1		→ $s4
-# double* e2		→ $s5
-# double val1		→ $s7
-# double val2		→ $s8
+# int numCol		→ $s3
+# int numFil		→ $s4
+# double* datos		→ $s5
+# int fa		→ $s6
+# double* e1		→ $s7
+# double* e2		→ $s8
+# double val1		→ $f20
+# double val2		→ $f22
 
 procesa_cols:
 
-	# PUSH: $ra, $s0, $s1, $s2, $s3, $s4, $s5, $s6, $s7 (9 * 4 = 36)
-	addi	$sp, $sp, -36
+	# PUSH: $ra, $s0, $s1, $s2, $s3, $s4, $s5, $s6, $s7 
+	addi	$sp, $sp, -56
 	sw	$ra, 0($sp)
 	sw	$s0, 4($sp)
 	sw	$s1, 8($sp)
@@ -659,77 +659,321 @@ procesa_cols:
 	sw	$s5, 24($sp)
 	sw	$s6, 28($sp)
 	sw	$s7, 32($sp)
+	sw	$s8, 36($sp)
+	s.d	$f20,40($sp)
+	s.d	$f22,48($sp)
+	
+	move	$s0, $a0	# mat
+	move	$s1, $a1	# indC1
+	move	$s2, $a2	# indC2
 	
 #   int numCol = mat->nCol;
+	lw	$s3,nCol($s0)
+	
 #   int numFil = mat->nFil;
+	lw	$s4,nFil($s0)
+	
 #   double* datos = mat->elementos;
+	la	$s5,elementos($s0)
+	
 #   for(int fa = 0; fa < numFil; fa++) {
+	move	$s6,$zero
+procesa_cols_for_fa:
+	bge	$s6,$s4, procesa_cols_for_fa_fin
+
 #     // e1 = &(datos[fa][indC1]);
 #     double* e1 = datos + (fa * numCol + indC1);
+	mul	$t0,$s6,$s3	# fa * numCol
+	add	$t0,$t0,$s1	# + indC1
+	mul	$t0,$t0,tamD
+	add	$s7,$t0,$s5	# + datos
+
 #     // e2 = &(datos[fa][indC2]);
 #     double* e2 = datos + (fa * numCol + indC2);
+	mul	$t0,$s6,$s3	# fa * numCol
+	add	$t0,$t0,$s2	# + indC2
+	mul	$t0,$t0,tamD
+	add	$s8,$t0,$s5	# + datos
+	
 #     double val1 = *e1;
+	l.d	$f20,0($s7)
+	
 #     double val2 = *e2;
+	l.d	$f22,0($s8)
+
 #     if(val1 > val2) {
+procesa_cols_if_val1_val2:
+	c.le.d	$f20,$f22
+	bc1t	procesa_cols_else_val1_val2
 #       *e1 = val1 / 2.0;
+	li.d	$f16,2.0
+	div.d	$f20,$f20,$f16
+	s.d	$f20,0($s7)
+	j	procesa_cols_if_val1_val2_fin
+	
 #     } else {
+procesa_cols_else_val1_val2:
 #       swap(e1, e2);
+	move	$a0,$s7
+	move	$a1,$s8
+	jal 	swap
+	l.d	$f22,0($s8)
 #     }
+
+
+procesa_cols_if_val1_val2_fin:
+
+
 #     *e2 = *e2 + 0.5625;
+	li.d	$f18,0.5625
+	# val2 = val2 + 0.5625
+	add.d	$f22,$f22,$f18 
+	s.d	$f22,0($s8)
+	
+	addi	$s6,$s6,1
+	b	procesa_cols_for_fa
 #   }
+procesa_cols_for_fa_fin:
 # }
 	# POP: $ra, $s0, $s1, $s2, $s3, $s4, $s5, $s6, $s7 (9 * 4 = 36)
-	sw	$ra, 0($sp)
-	sw	$s0, 4($sp)
-	sw	$s1, 8($sp)
-	sw	$s2, 12($sp)
-	sw	$s3, 16($sp)
-	sw	$s4, 20($sp)
-	sw	$s5, 24($sp)
-	sw	$s6, 28($sp)
-	sw	$s7, 32($sp)
-	addi	$sp, $sp, 36
+	lw	$ra, 0($sp)
+	lw	$s0, 4($sp)
+	lw	$s1, 8($sp)
+	lw	$s2, 12($sp)
+	lw	$s3, 16($sp)
+	lw	$s4, 20($sp)
+	lw	$s5, 24($sp)
+	lw	$s6, 28($sp)
+	lw	$s7, 32($sp)
+	lw	$s8, 36($sp)
+	l.d	$f20,40($sp)
+	l.d	$f22,48($sp)
+	addi	$sp, $sp, 56
 
 	jr	$ra
 procesa_cols__MARCAFIN:
 
 # double find_max(structMat* mat) {
+# Parámetros de Entrada
+# structMat* mat	→ $a0	$s0
 
+# Esta función llama al syscall: Debe usar la pila
+# Tabla de asignación de variables
+# int numCol		→ $s1
+# int numFil		→ $s2
+# double* datos		→ $s3
+# int f			→ $s4
+# int c			→ $s5
+# double max		→ $f20
+# double valor		→ $f22
+
+# Parámetros de Salida
+# double max		→ $f0
+
+find_max:
+	# PUSH $s0,$s1,$s2,$s3,$f20,$f22 (reservar 48)
+	addi $sp,$sp,-48
+	sw	$ra,0($sp)
+	sw	$s0,4($sp)
+	sw	$s1,8($sp)
+	sw	$s2,12($sp)
+	sw	$s3,16($sp)
+	sw	$s4,20($sp)
+	sw	$s5,24($sp)
+	s.d	$f20,32($sp)
+	s.d	$f22,40($sp)
+	
+	move	$s0,$a0		#*mat
+	
 #   int numCol = mat->nCol;
+	lw	$s1,nCol($s0)
+	
 #   int numFil = mat->nFil;
+	lw	$s2,nFil($s0)
+	
 #   double* datos = mat->elementos;
+	la	$s3,elementos($s0)
+	
 #   double max = datos[0];
+	l.d	$f20,0($s3)
+	
+	
 #   for(int f = 0; f < numFil; f++) {
+	
+	move	$s4,$zero
+for_f_find_max:
+	bge	$s4,$s2,for_f_find_max_fin
+	
 #     for(int c = 0; c < numCol; c++) {
+	move	$s5,$zero
+for_c_find_max:
+	bge	$s5,$s1,for_c_find_max_fin
+	
 #       double valor = datos[f * numCol + c];  // datos[f][c]
+	mul	$t0,$s4,$s1	# f * numCol
+	add	$t0,$t0,$s5	# + c
+	mul	$t0,$t0,tamD	# * 8
+	add 	$t0,$t0,$s3	# movemos la dirección a la posición del dato
+	
+	l.d	$f22,0($t0)
+	
 #       if (valor > max) {
+if_find_max:
+	c.lt.d	$f20,$f22
+	bc1f	if_find_max_fin
+
 #         max = valor;
+	mov.d	$f20,$f22
+	
 #         std::cout << "\nNuevo maximo " << max;
+	li	$v0,4
+	la	$a0,cadNuevoMax
+	syscall
+	
+	li	$v0,3
+	mov.d	$f12,$f20
+	syscall
+	
 #       }
+if_find_max_fin:
+
 #     }
+	addi	$s5,$s5,1
+	b	for_c_find_max
+for_c_find_max_fin:
+
 #   }
+	addi	$s4,$s4,1
+	b	for_f_find_max
+for_f_find_max_fin:
+
 #   return max;
+	mov.d	$f0,$f20
+	
+	#POP:
+	lw	$ra,0($sp)
+	lw	$s0,4($sp)
+	lw	$s1,8($sp)
+	lw	$s2,12($sp)
+	lw	$s3,16($sp)
+	lw	$s4,20($sp)
+	lw	$s5,24($sp)
+	l.d	$f20,32($sp)
+	l.d	$f22,40($sp)
+	addi $sp,$sp,48
+
 # }
+	jr	$ra
+find_max__MARCAFIN:
 
 # int leeFila(int numFilas) {
+# Parámetros de entrada
+# int numFilas		→ $a0 → $s0
+
+# Esta función llama al syscall: Debe usar la pila
+# Tabla de asignación de variables
+# int indFil		→ $s1
+
+leeFila:
+	# PUSH
+	addi 	$sp,$sp,-12
+	sw	$ra,0($sp)
+	sw	$s0,4($sp)
+	sw	$s1,8($sp)
+	
+	move	$s0,$a0
+	
 #   int indFil;
 #   std::cin >> indFil;
+	li	$v0,5
+	syscall
+	move	$s1,$v0
+	
 #   if ((indFil < 0) || (indFil >= numFilas)) {
+if_leeFila:
+	bltz	$s1, if_leeFila_then		# $t0 = indFil < 0
+	bge	$s1,$s0, if_leeFila_then	# $t1 = indFil >= numFilas
+	b	if_leeFila_fin
+	
+if_leeFila_then:
 #     std::cout << "Error: Numero de fila incorrecto\n";
+	li	$v0,4
+	la	$a0, cadErrorFila
+	syscall
+
 #     return -1;
+	li	$v0,-1
+	
+	lw	$ra,0($sp)
+	lw	$s0,4($sp)
+	lw	$s1,8($sp)
+	addi 	$sp,$sp,12
+	
+	jr	$ra
 #   }
+
+if_leeFila_fin:
 #   return indFil;
+	move	$v0,$s1
 # }
+	lw	$ra,0($sp)
+	lw	$s0,4($sp)
+	lw	$s1,8($sp)
+	addi 	$sp,$sp,12
+	
+	jr	$ra
+
+leeFila__MARCAFIN:
 
 # int leeColumna(int numColumnas) {
+
+leeColumna:
+	addi 	$sp,$sp,-12
+	sw	$ra,0($sp)
+	sw	$s0,4($sp)
+	sw	$s1,8($sp)
+	
+	move	$s0,$a0
 #   int indCol;
 #   std::cin >> indCol;
+	li	$v0,5
+	syscall
+	move	$s1,$v0
+	
 #   if ((indCol < 0) || (indCol >= numColumnas)){
+leeColumna_if:
+	bltz	$s1, leeColumna_if_then		# $t0 = indCol < 0
+	bge	$s1,$s0, leeColumna_if_then	# $t1 = indCol >= numColumnas
+	b	leeColumna_if_fin
+
+leeColumna_if_then:
 #     std::cout << "Error: Numero de columna incorrecto\n";
+	li	$v0,4
+	la	$a0, cadErrorCol
+	syscall
+	
 #     return -1;
+	li	$v0,-1
+	
+	lw	$ra,0($sp)
+	lw	$s0,4($sp)
+	lw	$s1,8($sp)
+	addi 	$sp,$sp,12
+	
+	jr	$ra
 #   }
+leeColumna_if_fin:
 #   return indCol;
+	move	$v0,$s1
 # }
+	lw	$ra,0($sp)
+	lw	$s0,4($sp)
+	lw	$s1,8($sp)
+	addi 	$sp,$sp,12
+	
+	jr	$ra
+	
+leeColumna__MARCAFIN:
 
 # std::tuple<int, int> pideFilaYColumna(structMat* mat) {
 #   std::cout << "\nIndice de fila: ";
