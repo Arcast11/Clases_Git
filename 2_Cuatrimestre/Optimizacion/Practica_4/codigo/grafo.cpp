@@ -239,6 +239,7 @@ void GRAFO::AlgoritmoPrim(){
   for(unsigned i = 0; i < n; i++){
     int min_coste = maxint;
     unsigned u = UERROR;
+   
 
     unsigned nC = 0;
     while (nC < n ) {
@@ -247,6 +248,7 @@ void GRAFO::AlgoritmoPrim(){
         u = nC;
       }
       nC++;
+      
     }
 
     if (u == UERROR) break;
