@@ -61,43 +61,54 @@ const int rpn_t<T>::evaluate(queue_l_t<char>& q) {
 
 template <class T>
 void rpn_t<T>::operate_(const char c) {
-  assert(c == '+' || c == '-' || c == '*' || c == '/');
+  assert(c == '+' || c == '-' || c == '*' || c == '/' || c == '^' || c == 'r' ||
+         c == 'l' || c == 'c');
 
-  int first_digit = stack_.top();
-  stack_.pop();
-  std::cout << "   Sacamos de la pila un operando: " << first_digit
-            << std::endl;
+  int op = 0;
+  int first_op = 0;
+  int second_op = 0;
 
-  int second_digit = stack_.top();
-  stack_.pop();
-  std::cout << "   Sacamos de la pila otro operando: " << second_digit
-            << std::endl;
+  if (c == 'r' || c == 'l' || c == 'c') {
+    op = stack_.top();
+    stack_.pop();
+  } else {
+    second_op = stack_.top();
+    stack_.pop();
+    std::cout << "   Sacamos de la pila un operando: " << second_op
+              << std::endl;
+
+    first_op = stack_.top();
+    stack_.pop();
+    std::cout << "   Sacamos de la pila otro operando: " << first_op
+              << std::endl;
+  }
 
   int result = 0;
 
   switch (c) {
     case '+':
-      result = first_digit + second_digit;
+      result = first_op + second_op;
       break;
     case '-':
-      result = second_digit - first_digit;
+      result = first_op - second_op;
       break;
     case '*':
-      result = first_digit * second_digit;
+      result = first_op * second_op;
       break;
     case '/':
-      result = second_digit / first_digit;
+      result = first_op / second_op;
       break;
     case '^':
-      result = pow(second_digit, first_digit);
+      result = pow(first_op, second_op);
       break;
     case 'r':
-      result = sqrt(second_digit, first_digit);
-    break : case 'l':
-      result = log2(first_digit);
+      result = sqrt(op);
+      break;
+    case 'l':
+      result = log2(op);
       break;
     case 'c':
-      result = pow(2, first_digit);
+      result = pow(2, op);
   }
 
   stack_.push(result);
