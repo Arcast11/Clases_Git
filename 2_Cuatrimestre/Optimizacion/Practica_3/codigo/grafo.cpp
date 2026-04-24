@@ -216,3 +216,6 @@ void GRAFO::ComponentesFuertementeConexas() {
     i++;
   }
 }
+
+
+// Modificación

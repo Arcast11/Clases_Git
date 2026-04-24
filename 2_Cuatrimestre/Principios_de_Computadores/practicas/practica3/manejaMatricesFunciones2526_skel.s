@@ -350,6 +350,7 @@ cadMax:         .asciiz "\nEl valor maximo en la matriz es "
 cadFin:         .asciiz "\n\nTermina el programa\n"
 
 
+	.text
 
 # void print_mat(structMat* mat) {
 # Parámetros de entrada
@@ -529,23 +530,6 @@ swap:
 	jr	$ra
 swap__MARCAFIN:
 
-
-# void intercambia(structMat* mat, int indF, int indC) {
-# Parámetros de entrada:
-# strucMat* 	→ $a0 → $s0
-# int indF 	→ $a1 → $s1
-# int indC 	→ $a1 → $s2
-# 
-# Esta función llama a otra: NECESITA USAR LA PILA
-# Tabla de asignación de registros
-# int numCol 	→ $s3
-# int numFil 	→ $s4
-# double* datos	→ $s5
-# double* e1 	→ $t4
-# double* e1 	→ $t
-
-
-
 # void intercambia(structMat* mat, int indF, int indC) {
 # Parámetros de entrada:
 # structMat* mat	→ $a0 → $s0
@@ -554,58 +538,56 @@ swap__MARCAFIN:
 
 # Esta función llama a otra: NECESITA USAR LA PILA
 # Tabla de asignación de registros
-# int numCol		→ $s3
-# int numFil		→ $s4
-# double* datos		→ $s5
+# int numCol		→ $t6
+# int numFil		→ $t7
+# double* datos		→ $t8
 # double* e1		→ $t4
 # double* e2		→ $t5
 
 intercambia:
     # PUSH: $ra, $s0, $s1, $s2, $s3, $s4, $s5 (7 registros * 4 bytes = 28 bytes)
    
-	addi	$sp, $sp, -28
+	addi	$sp, $sp, -16
 	sw	$ra, 0($sp)
 	sw	$s0, 4($sp)
 	sw	$s1, 8($sp)
 	sw	$s2, 12($sp)
-	sw	$s3, 16($sp)
-	sw	$s4, 20($sp)
-	sw	$s5, 24($sp)
+
 
 	move	$s0, $a0	# mat*
 	move	$s1, $a1	# indF
 	move	$s2, $a2	# indC
 
 #   int numCol = mat->nCol;
-	lw	$s3, nCol($s0)
+	lw	$t6, nCol($s0)
 
 #   int numFil = mat->nFil;
-	lw	$s4, nFil($s0)
+	lw	$t7, nFil($s0)
     
 #   double* datos = mat->elementos;
-	la	$s5,elementos($s0)
+	la	$t8,elementos($s0)
 
 #   // e1 = &(datos[indF][indC]);
 #   double* e1 = datos + (indF * numCol + indC);
-	mul	$t0, $s1, $s3	# $t0 = indF * numCol
+	mul	$t0, $s1, $t6	# $t0 = indF * numCol
 	add	$t0, $t0, $s2	# $t0 = indF * numCol + indC
 	mul	$t0, $t0, tamD	# 
-	add	$t4, $s5, $t0	# $t4 = dirección de memoria de e1
+	add	$t4, $t8, $t0	# $t4 = dirección de memoria de e1
 
 #   int indFilaOpuesta = (numFil - indF - 1);
-	sub	$t1, $s4, $s1	# numFil - indF
+	sub	$t1, $t7, $s1	# numFil - indF
 	addi	$t1, $t1, -1	# indFilaOpuesta
 
 #   int indColOpuesta = (numCol - indC - 1);
-	sub	$t2, $s3, $s2	# numCol - indC
+	sub	$t2, $t6, $s2	# numCol - indC
 	addi	$t2, $t2, -1	# indColOpuesta
 
 #   // e2 = &(datos[indFilaOpuesta][indColOpuesta])
 #   double* e2 = datos + (indFilaOpuesta * numCol + indColOpuesta);
-	mul	$t3, $t1, $s3	# indFilaOpuesta * numCol
+	mul	$t3, $t1, $t6	# indFilaOpuesta * numCol
 	add	$t3, $t3, $t2	# + indColOpuesta
 	mul	$t3, $t3, tamD	
-	add	$t5, $s5, $t3
+	add	$t5, $t8, $t3
 
 #   swap(e1, e2);
 	# Paso como parametros e1 y e2
@@ -620,10 +602,7 @@ intercambia:
 	lw	$s0, 4($sp)
 	lw	$s1, 8($sp)
 	lw	$s2, 12($sp)
-	lw	$s3, 16($sp)
-	lw	$s4, 20($sp)
-	lw	$s5, 24($sp)
-	addi	$sp, $sp, 28
+	addi	$sp, $sp, 16
 
 	jr	$ra
 
@@ -872,14 +851,13 @@ find_max__MARCAFIN:
 
 # Esta función llama al syscall: Debe usar la pila
 # Tabla de asignación de variables
-# int indFil		→ $s1
+# int indFil		→ $t0
 
 leeFila:
 	# PUSH
-	addi 	$sp,$sp,-12
+	addi 	$sp,$sp,-8
 	sw	$ra,0($sp)
 	sw	$s0,4($sp)
-	sw	$s1,8($sp)
 	
 	move	$s0,$a0
 	
@@ -887,12 +865,12 @@ leeFila:
 #   std::cin >> indFil;
 	li	$v0,5
 	syscall
-	move	$s1,$v0
+	move	$t0,$v0
 	
 #   if ((indFil < 0) || (indFil >= numFilas)) {
 if_leeFila:
-	bltz	$s1, if_leeFila_then		# $t0 = indFil < 0
-	bge	$s1,$s0, if_leeFila_then	# $t1 = indFil >= numFilas
+	bltz	$t0, if_leeFila_then		# $t0 = indFil < 0
+	bge	$t0,$s0, if_leeFila_then	# $t1 = indFil >= numFilas
 	b	if_leeFila_fin
 	
 if_leeFila_then:
@@ -906,20 +884,18 @@ if_leeFila_then:
 	
 	lw	$ra,0($sp)
 	lw	$s0,4($sp)
-	lw	$s1,8($sp)
-	addi 	$sp,$sp,12
+	addi 	$sp,$sp,8
 	
 	jr	$ra
 #   }
 
 if_leeFila_fin:
 #   return indFil;
-	move	$v0,$s1
+	move	$v0,$t0
 # }
 	lw	$ra,0($sp)
 	lw	$s0,4($sp)
-	lw	$s1,8($sp)
-	addi 	$sp,$sp,12
+	addi 	$sp,$sp,8
 	
 	jr	$ra
 
@@ -928,22 +904,21 @@ leeFila__MARCAFIN:
 # int leeColumna(int numColumnas) {
 
 leeColumna:
-	addi 	$sp,$sp,-12
+	addi 	$sp,$sp,-8
 	sw	$ra,0($sp)
 	sw	$s0,4($sp)
-	sw	$s1,8($sp)
 	
 	move	$s0,$a0
 #   int indCol;
 #   std::cin >> indCol;
 	li	$v0,5
 	syscall
-	move	$s1,$v0
+	move	$t0,$v0
 	
 #   if ((indCol < 0) || (indCol >= numColumnas)){
 leeColumna_if:
-	bltz	$s1, leeColumna_if_then		# $t0 = indCol < 0
-	bge	$s1,$s0, leeColumna_if_then	# $t1 = indCol >= numColumnas
+	bltz	$t0, leeColumna_if_then		# $t0 = indCol < 0
+	bge	$t0,$s0, leeColumna_if_then	# $t1 = indCol >= numColumnas
 	b	leeColumna_if_fin
 
 leeColumna_if_then:
@@ -957,46 +932,145 @@ leeColumna_if_then:
 	
 	lw	$ra,0($sp)
 	lw	$s0,4($sp)
-	lw	$s1,8($sp)
-	addi 	$sp,$sp,12
+	addi 	$sp,$sp,8
 	
 	jr	$ra
 #   }
 leeColumna_if_fin:
 #   return indCol;
-	move	$v0,$s1
+	move	$v0,$t0
 # }
 	lw	$ra,0($sp)
 	lw	$s0,4($sp)
-	lw	$s1,8($sp)
-	addi 	$sp,$sp,12
+	addi 	$sp,$sp,8
 	
 	jr	$ra
 	
 leeColumna__MARCAFIN:
 
 # std::tuple<int, int> pideFilaYColumna(structMat* mat) {
+# Parámetros de entrada
+# strucMat* mat		→ $a0 → $s0
+
+# Esta función llama a otra: Debemos 
+# Parámetros de salida
+# int indFil		→ $s1
+# int indCol		→ $s2
+
+pideFilaYColumna:
+
+	#PUSH
+	addi	$sp,$sp,-16
+	sw	$ra,0($sp)
+	sw	$s0,4($sp)
+	sw	$s1,8($sp)
+	sw	$s2,12($sp)
+
+	move	$s0,$a0
+
 #   std::cout << "\nIndice de fila: ";
+	li	$v0,4
+	la	$a0, pideFila
+	syscall
+	
 #   int indFil = leeFila(mat->nFil);
+	lw	$a0,nFil($s0)	#$a0 = indFil
+	jal	leeFila
+	move	$s1,$v0
+
 #   if (indFil < 0) {
+	bltz	$s1,pideFilaYColumna_if_indFil
+	j	pideFilaYColumna_if_indFil_fin
+pideFilaYColumna_if_indFil:
 #     return {-1, -1};
+	li	$v0,-1
+	li	$v1,-1
+	
+	lw	$ra,0($sp)
+	lw	$s0,4($sp)
+	lw	$s1,8($sp)
+	lw	$s2,12($sp)
+	addi	$sp,$sp,16
+	
+	jr	$ra
+
 #   }
+pideFilaYColumna_if_indFil_fin:
+
 #   std::cout << "Indice de columna: ";
+	li	$v0,4
+	la	$a0, pideCol
+	syscall
+	
+
 #   int indCol = leeColumna(mat->nCol);
+	lw	$a0,nCol($s0)	#$a0 = indFil
+	jal	leeColumna
+	move	$s2,$v0
+
 #   if (indCol < 0) {
+	bltz	$s2,pideFilaYColumna_if_indCol
+	j	pideFilaYColumna_if_indCol_fin
+pideFilaYColumna_if_indCol:
+
+
 #     return {-1, -1};
+	li	$v0,-1
+	li	$v1,-1
+
+	lw	$ra,0($sp)
+	lw	$s0,4($sp)
+	lw	$s1,8($sp)
+	lw	$s2,12($sp)
+	addi	$sp,$sp,16
+	
+	jr	$ra
+
+
 #   }
+pideFilaYColumna_if_indCol_fin:
 #   return {indFil, indCol};
+	move	$v0,$s1
+	move	$v1,$s2
+
+	lw	$ra,0($sp)
+	lw	$s0,4($sp)
+	lw	$s1,8($sp)
+	lw	$s2,12($sp)
+	addi	$sp,$sp,16
 # }
+	jr	$ra
+pideFilaYColumna__MARCAFIN:
+
 
 # int main() {
-#   std::cout << std::setprecision(18); // Ignorar
+main:
+# Tabla de asignación de variables
+# structMat* matTrabajo	→ $s0
+# int opcion 		→ $s1
+# int indFil		→ $s2
+# int indCol		→ $s3
+# int indC1		→ $s4
+# int indC2		→ $s5
+
+
 #   std::cout << "\nComienza programa manejo matrices con funciones";
+	li	$v0,4
+	la	$a0,cadTitulo
+	syscall
 
 #   structMat* matTrabajo = matrices[0];
+	la	$t0,matrices
+	lw	$s0,0($t0)
+	
 #   int opcion;
 #   do {
+bucle_do:
+
 #     print_mat(matTrabajo);
+	move	$a0,$s0
+	jal	print_mat
+	
 #     std::cout <<
 #     "(0) Terminar el programa\n"
 #     "(1) Cambiar la matriz de trabajo\n"
@@ -1006,80 +1080,282 @@ leeColumna__MARCAFIN:
 #     "(7) Encuentra maximo\n"
 #     "\nIntroduce opción elegida: ";
 
+	li	$v0,4
+	la	$a0,cadMenu
+	syscall
+
 #     std::cin >> opcion;
+	li	$v0,5
+	syscall
+	move	$s1,$v0
 
 #     int indFil;
 #     int indCol;
 #     switch (opcion) {
+switch:
+	li	$t0,0
+	li	$t1,1
+	li	$t2,2
+	li	$t3,3
+	li	$t4,4
+	li	$t5,5
+	li	$t6,6
+	li	$t7,7
+	
+	beq	$s1,$t0,switch_caso0
+	beq	$s1,$t1,switch_caso1
+	beq	$s1, $t3, switch_caso3
+	beq	$s1, $t4, switch_caso4
+	beq	$s1, $t5, switch_caso5
+	beq	$s1, $t7, switch_caso7
+	j	default
+	
 #       // Opción 0 //////////////////////////////////////////////////////////
 #       case 0:
+switch_caso0:
 #         std::cout << "\nEligida opción de salir";
+	li	$v0,4
+	la	$a0,cadSalir
+	syscall
+	
 #         break; // salimos del switch
+	j	bucle_while_fin
+	
 #       // Opción 1 //////////////////////////////////////////////////////////
 #       case 1:
+switch_caso1:
+
 #         std::cout << "\nElije la matriz de trabajo: ";
-#         int matT;
+	li	$v0,4
+	la	$a0,cadEligeMat
+	syscall
+	
+#         int matT;	# int matT → $t0
 #         std::cin >> matT;
+	li	$v0,5
+	syscall
+	move	$t0,$v0
+
 #         if ((matT < 0) || (matT >= NUM_MATRICES)) {
+switch_caso1_if:
+	li	$t1,NUM_MATRICES
+	
+	bltz	$t0,switch_caso1_if_then
+	bge	$t0,$t1,switch_caso1_if_then
+	j	switch_caso1_if_fin
+switch_caso1_if_then:
+
 #           std::cout << "Numero de matriz de trabajo incorrecto\n";
+	li	$v0,4
+	la	$a0,cadErrorMat
+	syscall
+	
 #           break; // salimos del switch
+	j	switch_fin
+
 #         }
+switch_caso1_if_fin:
+
 #         matTrabajo = matrices[matT];
+
+
+	la	$t1, matrices	# Dirección base de la matriz
+	
+	mul	$t0, $t0, tamP 	# D
+	add	$t1, $t1,$t0
+	
+	lw	$s0, 0($t1)
+	
 #         break; // salimos del switch
+	j	switch_fin
 
 #       // Opción 3 //////////////////////////////////////////////////////////
 #       case 3:
+switch_caso3:
+
 #         std::tie(indFil, indCol) = pideFilaYColumna(matTrabajo);
+	move 	$a0,$s0
+	jal	pideFilaYColumna
+	move	$s2,$v0
+	move	$s3,$v1
+
 #         if (indFil < 0)
+switch_caso3_if:
+	bgez	$s2,switch_caso3_if_fin
 #           break; // salimos del switch
+	j	switch_fin
+	
+switch_caso3_if_fin:
+
 #         std::cout << "Nuevo valor para el elemento: ";
-#         double valor;
+	li	$v0,4
+	la	$a0,cadNuevoValor
+	syscall
+	
 #         std::cin >> valor;
+	li	$v0,7
+	syscall
+	mov.d	$f12,$f0 # parametro de entrada
 
 #         change_elto(matTrabajo, indFil, indCol, valor);
+	move	$a0,$s0
+	move	$a1,$s2
+	move	$a2,$s3
+	
+	jal	change_elto
 
+	j	switch_fin
 #         break; // salimos del switch
 
 #       // Opción 4 //////////////////////////////////////////////////////////
 #       case 4:
+switch_caso4:
+
 #         std::tie(indFil, indCol) = pideFilaYColumna(matTrabajo);
+	move 	$a0,$s0
+	jal	pideFilaYColumna
+	move	$s2,$v0
+	move	$s3,$v1
+	
 #         if (indFil < 0)
+
+switch_caso4_if:
+
+	bgez	$s2,switch_caso4_if_fin
+
 #           break; // salimos del switch
+	j	switch_fin
+
+switch_caso4_if_fin:
 
 #         intercambia(matTrabajo, indFil, indCol);
-
+	move	$a0,$s0
+	move	$a1,$s2
+	move	$a2,$s3
+	
+	jal	intercambia
+	
 #         break; // salimos del switch
+	j	switch_fin
+
 
 #       // Opción 5 //////////////////////////////////////////////////////////
 #       case 5:
+switch_caso5:
+
 #         std::cout << "\nPrimera columna a procesar: ";
+	li	$v0,4
+	la	$a0,cadPrimCol
+	syscall
+
 #         int indC1;
 #         indC1 = leeColumna(matTrabajo->nCol);
+	lw	$a0,nCol($s0)
+	jal	leeColumna
+	move	$s4,$v0
+	
 #         if (indC1 < 0) {
+switch_caso5_if_indC1:
+	bgez	$s4,switch_caso5_if_indC1_fin
+	
 #           break; // salimos del switch
+	j	switch_fin
 #         }
+switch_caso5_if_indC1_fin:
+
 #         std::cout << "Segunda columna a procesar: ";
+	li	$v0,4
+	la	$a0,cadSegCol
+	syscall
+
 #         int indC2;
 #         indC2 = leeColumna(matTrabajo->nCol);
+	lw	$a0,nCol($s0)
+	jal	leeColumna
+	move	$s5,$v0
+
 #         if (indC2 < 0) {
+switch_caso5_if_indC2:
+	bgez	$s5,switch_caso5_if_indC2_fin
+	
 #           break;  // salimos del switch
+	j	switch_fin
+	
 #         }
+switch_caso5_if_indC2_fin:
 
 #         procesa_cols(matTrabajo, indC1, indC2);
+	move	$a0,$s0
+	move	$a1,$s4
+	move	$a2,$s5
+	jal	procesa_cols
+	
 #         break;  // salimos del switch
+	j	switch_fin
 
 #       // Opción 7 //////////////////////////////////////////////////////////
 #       case 7:
+switch_caso7:
+
 #         double maximo;
 #         maximo = find_max(matTrabajo);
+	move	$a0,$s0
+	jal	find_max
+	
+	mov.d	$f20,$f0
+	
 #         std::cout << "\nEl valor maximo en la matriz es " << maximo;
+	li	$v0,4
+	la	$a0,cadMax
+	syscall
+	
+	li	$v0, 3
+	mov.d	$f12, $f20
+	syscall
 #         break; // salimos del switch
+	j	switch_fin
 
 #       default:
+default:
 #         // Opción Incorrecta ////////////////////////////////////////////////
 #         std::cout << "Error: opcion incorrecta\n";
+	li	$v0,4
+	la	$a0,cadErrorOpcion
+	syscall
 #     }  // fin del switch
+switch_fin:
+
 #     std::cout << "\nTerminada la opción " << opcion;
+	li	$v0,4
+	la	$a0,cadTerOpc
+	syscall
+	
+	li	$v0, 1
+	move	$a0, $s1
+	syscall
+	
 #   } while (opcion != 0);
+	bnez	$s1,bucle_do
+	
+bucle_while_fin:
+
+#     std::cout << "\nTerminada la opción " << opcion;
+	li	$v0,4
+	la	$a0,cadTerOpc
+	syscall
+	
+	li	$v0, 1
+	move	$a0, $s1
+	syscall
+
 #   std::cout << "\n\nTermina el programa\n";
+	li	$v0,4
+	la	$a0,cadFin
+	syscall
+
+	
+	li	$v0,10
+	syscall
 # }
+
+

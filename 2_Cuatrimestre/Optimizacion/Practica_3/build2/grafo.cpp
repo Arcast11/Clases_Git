@@ -38,7 +38,7 @@ void GRAFO ::build(char nombrefichero[85], int& errorapertura) {
       dummy.j = j;
       LP[i].push_back(dummy);
 
-      // Si el grafo es NO dirigido, añadimos el arco en ambas direcciones en LS
+      // Si el grafo es NO dirigido, añadimos el arco en ambas direcciones en LSc
       if (dirigido == 0) {
         dummy.j = i;
         LP[j].push_back(dummy);
