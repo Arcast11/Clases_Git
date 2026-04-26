@@ -70,6 +70,7 @@ void rpn_t<T>::operate_(const char c) {
 
   if (c == 'r' || c == 'l' || c == 'c') {
     op = stack_.top();
+    std::cout << "   Sacamos de la pila un operando: " << op << std::endl;
     stack_.pop();
   } else {
     second_op = stack_.top();
