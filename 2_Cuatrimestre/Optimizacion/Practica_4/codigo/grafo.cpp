@@ -218,8 +218,8 @@ void GRAFO::ComponentesFuertementeConexas() {
 }
 
 void GRAFO::AlgoritmoPrim(){
-  vector<bool> M(n,false);
-  vector<int> coste(n, maxint);
+  vector<bool> M(n,false); // Nodos añadidos al árbol
+  vector<int> coste(n, maxint); // vector de costes inicializado a infinito
   vector<unsigned> pred(n,UERROR);  // T en la guia
 
   unsigned r ;  // Nodo raiz del grafo
@@ -231,17 +231,17 @@ void GRAFO::AlgoritmoPrim(){
   coste[r] = 0;
   pred[r] = r;
 
-  int coste_total_mst = 0;
+  int coste_total = 0;
 
   cout << "\nConstruyendo el arbol generador de mínimo coste..." << endl;
   cout << "Nodo raiz: " << r + 1 <<  endl;
 
   for(unsigned i = 0; i < n; i++){
     int min_coste = maxint;
-    unsigned u = UERROR;
+    unsigned u = UERROR; // nodo actual
    
 
-    unsigned nC = 0;
+    unsigned nC = 0; // Nodos Conectados
     while (nC < n ) {
       if(!M[nC] && coste[nC] < min_coste ){
         min_coste = coste[nC];
@@ -254,7 +254,7 @@ void GRAFO::AlgoritmoPrim(){
     if (u == UERROR) break;
 
     M[u] = true;
-    coste_total_mst += coste[u];
+    coste_total += coste[u];
 
     if (u != r ) {
       cout << "Arista anadida: (" << pred[u] + 1 << ", " 
@@ -273,7 +273,7 @@ void GRAFO::AlgoritmoPrim(){
       }
     }
   }
-  cout << "\nCoste total del MST: " << coste_total_mst << endl;
+  cout << "\nCoste total del MST: " << coste_total << endl;
 }
 
 
