@@ -62,16 +62,34 @@ const int rpn_t<T>::evaluate(queue_l_t<char>& q) {
 template <class T>
 void rpn_t<T>::operate_(const char c) {
   assert(c == '+' || c == '-' || c == '*' || c == '/' || c == '^' || c == 'r' ||
-         c == 'l' || c == 'c');
+         c == 'l' || c == 'c' || c == 'm');
 
   int op = 0;
   int first_op = 0;
   int second_op = 0;
+  int third_op = 0;
 
   if (c == 'r' || c == 'l' || c == 'c') {
     op = stack_.top();
     std::cout << "   Sacamos de la pila un operando: " << op << std::endl;
     stack_.pop();
+
+  } else if (c == 'm') {
+    third_op = stack_.top();
+    stack_.pop();
+    std::cout << "   Sacamos de la pila el tercer operando: " << third_op
+              << std::endl;
+
+    second_op = stack_.top();
+    stack_.pop();
+    std::cout << "   Sacamos de la pila el segundo operando: " << second_op
+              << std::endl;
+
+    first_op = stack_.top();
+    stack_.pop();
+    std::cout << "   Sacamos de la pila el primer operando: " << first_op
+              << std::endl;
+
   } else {
     second_op = stack_.top();
     stack_.pop();
@@ -97,7 +115,7 @@ void rpn_t<T>::operate_(const char c) {
       result = first_op * second_op;
       break;
     case '/':
-      result = first_op / second_op;
+      g++ main_rpn_t.cc - o main_rpn_t result = first_op / second_op;
       break;
     case '^':
       result = pow(first_op, second_op);
@@ -110,6 +128,9 @@ void rpn_t<T>::operate_(const char c) {
       break;
     case 'c':
       result = pow(2, op);
+    case 'm':
+      result = (first_op + second_op + third_op) / 3;
+      break;
   }
 
   stack_.push(result);
