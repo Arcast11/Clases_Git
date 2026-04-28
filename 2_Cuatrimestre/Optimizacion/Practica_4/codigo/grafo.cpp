@@ -217,16 +217,16 @@ void GRAFO::ComponentesFuertementeConexas() {
   }
 }
 
-void GRAFO::AlgoritmoPrim(){
-  vector<bool> M(n,false); // Nodos añadidos al árbol
-  vector<int> coste(n, maxint); // vector de costes inicializado a infinito
-  vector<unsigned> pred(n,UERROR);  // T en la guia
+void GRAFO::AlgoritmoPrim() {
+  vector<bool> M(n, false);          // Nodos añadidos al árbol
+  vector<int> coste(n, maxint);      // vector de costes inicializado a infinito
+  vector<unsigned> pred(n, UERROR);  // T en la guia
 
-  unsigned r ;  // Nodo raiz del grafo
+  unsigned r;  // Nodo raiz del grafo
   cout << "introduce el nodo de partidda (1 a " << n << "): ";
   cin >> r;
-  r--; // Ajustamos el indice ya que esta guardado como vector LA
-  
+  r--;  // Ajustamos el indice ya que esta guardado como vector LA
+
   // Inicializamos el nodo raiz
   coste[r] = 0;
   pred[r] = r;
@@ -234,46 +234,49 @@ void GRAFO::AlgoritmoPrim(){
   int coste_total = 0;
 
   cout << "\nConstruyendo el arbol generador de mínimo coste..." << endl;
-  cout << "Nodo raiz: " << r + 1 <<  endl;
+  cout << "Nodo raiz: " << r + 1 << endl;
 
-  for(unsigned i = 0; i < n; i++){
+  unsigned u;  // nodo actual
+
+  for (unsigned i = 0; i < n; i++) {
     int min_coste = maxint;
-    unsigned u = UERROR; // nodo actual
-   
+    u = UERROR;  // nodo actual
 
-    unsigned nC = 0; // Nodos Conectados
-    while (nC < n ) {
-      if(!M[nC] && coste[nC] < min_coste ){
+    unsigned nC = 0;  // Nodos Conectados
+    while (nC < n) {
+      if (!M[nC] && coste[nC] < min_coste) {
         min_coste = coste[nC];
         u = nC;
       }
       nC++;
-      
     }
 
-    if (u == UERROR) break;
+    if (u == UERROR) {
+      cout << "El grafo no es conexo..." << endl;
+      coste_total = 0;
+      break;
+    }
 
     M[u] = true;
     coste_total += coste[u];
 
-    if (u != r ) {
-      cout << "Arista anadida: (" << pred[u] + 1 << ", " 
-           << u + 1 << ") - Coste: " << coste[u] << endl;
+    if (u != r) {
+      cout << "Arista anadida: (" << pred[u] + 1 << ", " << u + 1
+           << ") - Coste: " << coste[u] << endl;
     }
     // Actualizamos los costes en y predecesores en la lista de adyacencia
     for (unsigned j = 0; j < LS[u].size(); j++) {
       unsigned v = LS[u][j].j;
       int peso = LS[u][j].c;
 
-
       // Si v no está en M y el peso de la arista (u,v) mejora el coste actual
       if (!M[v] && coste[v] > peso) {
         coste[v] = peso;
-        pred[v] = u; // Cambiamos el nodo de conexión
+        pred[v] = u;  // Cambiamos el nodo de conexión
       }
     }
   }
-  cout << "\nCoste total del MST: " << coste_total << endl;
+  if (u != UERROR) {
+    cout << "\nCoste total del MST: " << coste_total << endl;
+  }
 }
-
-
