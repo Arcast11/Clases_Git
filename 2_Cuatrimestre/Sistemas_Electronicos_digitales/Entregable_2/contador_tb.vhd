@@ -5,35 +5,40 @@ entity sistema37_tb is
 end sistema37_tb;
 
 architecture Behavioral of sistema37_tb is
-    signal clk, reset, ce : STD_LOGIC := '0';
-    signal count : STD_LOGIC_VECTOR(3 downto 0);
+
+    component contador37
+        port (clk       : in std_logic
+              reset     : in std_logic 
+              ce        : in std_logic 
+              count     : out STD_LOGIC_VECTOR(3 downto 0));
+    end component;
+
+    signal clk      : std_logic := '0';
+    signal reset    : std_logic := '0';
+    signal ce       : std_logic := '0';
+    signal count    : std_logic_vector (3 downto 0);
+
 begin
 
-    uut: entity work.contador37
-        port map (
-            clk   => clk,
-            reset => reset,
-            ce    => ce,
-            count => count
-        );
+    dut : contador37
+    port map    (clk    => clk,
+                 reset  => reset,
+                 ce     => ce,
+                 count  => count);
+    
+    clk <= not clk after 10ns;
 
-    -- Clock
-    clk <= not clk after 10 ns;
+    stimuli : process
 
-    process
     begin
-        reset <= '1';
-        ce <= '0';
-        wait for 20 ns;
-
+    
+        ce <= '0'; reset <= '1';
+        wait for 100ns;
         reset <= '0';
+        wait for 100 ns;
         ce <= '1';
+        wait; 
+        end process;
 
-        wait for 200 ns;
-        reset <= '1';
-        wait for 20 ns;
-
-        wait;
-    end process;
 
 end Behavioral;
