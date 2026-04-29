@@ -7,10 +7,10 @@ LDFLAGS =
 # --- Variables del Proyecto ---
 
 # 1. El nombre de tu programa final
-EXEC = mi_programa.out
+EXEC = mi_programa_build2.out
 
 # 2. La lista de TODOS tus archivos fuente (.cc)
-SRCS = main.cpp grafo.cpp
+SRCS = main.cpp grafo_build2.cpp
 
 # 3. Lista automática de archivos objeto (.o)
 OBJS = $(SRCS:.cc=.o)
