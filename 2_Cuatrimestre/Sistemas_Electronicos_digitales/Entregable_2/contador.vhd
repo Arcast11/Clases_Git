@@ -11,44 +11,70 @@ entity contador37 is
 end contador37;
 
 architecture Behavioral of contador37 is
-    signal QA, QB, QC, QD : STD_LOGIC;
-    signal DA, DB, TC, TD : STD_LOGIC;
+
+    component fft_preset
+        port (clk       : in std_logic;
+              ce        : in std_logic;
+              preset    : in std_logic;
+              t         : in std_logic;
+              q         : out std_logic);
+
+    end component;
+
+    component fft_reset
+        port (clk       : in std_logic;
+              ce        : in std_logic;
+              reset    : in std_logic;
+              t         : in std_logic;
+              q         : out std_logic);
+
+    end component;
+
+    component ffd_preset
+        port (clk       : in std_logic;
+              ce        : in std_logic;
+              preset     :in std_logic;
+              d         : in std_logic;
+              q         : out std_logic);
+
+    end component;
+
+    signal qa, qb, qc, qd : std_logic;
+    signal da, db, tc, td : std_logic;
+
 begin
 
-    -- Funciones lógicas
-    DA <= QB and QC and QD;
-    DB <= (not QA and not QC) or (QA and not QB);
-    TC <= (not QB) or (QC and QD);
-    TD <= QB and not QC;
+    unitA : ffd_reset
+        port (clk       => clk,
+              ce        => ce,
+              reset     => reset,
+              d         => da,
+              q         => qa);
+    unitB : ffd_preset
+        port (clk       => clk,
+              ce        => ce,
+              preset    => preset,
+              d         => db,
+              q         => qb);
+    unitc : fft_preset
+        port (clk       => clk,
+              ce        => ce,
+              preset    => preset,
+              d         => tc,
+              q         => qc);
+    unitD : fft_preset
+        port (clk       => clk,
+              ce        => ce,
+              preset    => preset,
+              d         => td,
+              q         => qd);
 
-    -- Biestables D
-    process(clk, reset)
-    begin
-        if reset = '1' then
-            QA <= '0';
-            QB <= '0';
-        elsif rising_edge(clk) then
-            if ce = '1' then
-                QA <= DA;
-                QB <= DB;
-            end if;
-        end if;
-    end process;
 
-    -- Biestables T
-    process(clk, reset)
-    begin
-        if reset = '1' then
-            QC <= '0';
-            QD <= '0';
-        elsif rising_edge(clk) then
-            if ce = '1' then
-                QC <= QC xor TC;
-                QD <= QD xor TD;
-            end if;
-        end if;
-    end process;
+    td <= (not qb and qc and qd);
+    tc <= (qa and not qc and not qb) or (qb and not qc) or (not qa and not qc and qd);
+    db <= (not qb and not qc and not qd) or (not qa and not qc and qd);
+    da <= (qb and not qc) or (not qa and qb) or (qc and qd);
 
-    count <= QA & QB & QC & QD;
-
+    count   <= qa & qb & qc & qd;
+    
 end Behavioral;

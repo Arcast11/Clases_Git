@@ -219,7 +219,7 @@ void GRAFO::ComponentesFuertementeConexas() {
 
 void GRAFO::AlgoritmoPrim() {
   vector<bool> M(n, false);          // Nodos añadidos al árbol
-  vector<int> coste(n, maxint);      // vector de costes inicializado a infinito
+  vector<int> coste(n, 0);           // vector de costes inicializado a infinito
   vector<unsigned> pred(n, UERROR);  // T en la guia
 
   unsigned r;  // Nodo raiz del grafo
@@ -228,7 +228,7 @@ void GRAFO::AlgoritmoPrim() {
   r--;  // Ajustamos el indice ya que esta guardado como vector LA
 
   // Inicializamos el nodo raiz
-  coste[r] = 0;
+  coste[r] = maxint;
   pred[r] = r;
 
   int coste_total = 0;
@@ -239,12 +239,12 @@ void GRAFO::AlgoritmoPrim() {
   unsigned u;  // nodo actual
 
   for (unsigned i = 0; i < n; i++) {
-    int min_coste = maxint;
+    int min_coste = 0;
     u = UERROR;  // nodo actual
 
     unsigned nC = 0;  // Nodos Conectados
     while (nC < n) {
-      if (!M[nC] && coste[nC] < min_coste) {
+      if (!M[nC] && coste[nC] > min_coste) {
         min_coste = coste[nC];
         u = nC;
       }
@@ -270,13 +270,13 @@ void GRAFO::AlgoritmoPrim() {
       int peso = LS[u][j].c;
 
       // Si v no está en M y el peso de la arista (u,v) mejora el coste actual
-      if (!M[v] && coste[v] > peso) {
+      if (!M[v] && coste[v] < peso) {
         coste[v] = peso;
         pred[v] = u;  // Cambiamos el nodo de conexión
       }
     }
   }
   if (u != UERROR) {
-    cout << "\nCoste total del MST: " << coste_total << endl;
+    cout << "\nCoste total del MST: " << endl;
   }
 }

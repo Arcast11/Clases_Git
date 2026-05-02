@@ -83,11 +83,12 @@ class GRAFO {
   void ComponentesConexas();  // Construye el vector de componentes conexas de
                               // un grafo no dirigido
   void ComponentesFuertementeConexas();  //
-  
+
   // Practica 4
   void AlgoritmoPrim();
+  void AlgoritmoPrimoMaximo();
 
-  ~GRAFO();                              // Destructor del objeto grafo
+  ~GRAFO();  // Destructor del objeto grafo
 };
 
 #endif
