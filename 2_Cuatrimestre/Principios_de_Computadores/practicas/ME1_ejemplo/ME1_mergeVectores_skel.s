@@ -278,7 +278,7 @@ ordenado__MARCAFIN:
 merge:
 	
 	# PUSH
-	addi	$sp, $sp, -24
+	addi	$sp, $sp, -28
 	sw	$ra, 0($sp)
 	sw	$s0, 4($sp)
 	sw	$s1, 8($sp)
@@ -337,8 +337,8 @@ merge_if_o2_fin:
 
 #     while ( ( i < n1) && (j < n2) ) {
 merge_while_ij_lt_n1n2:
-	bge	$t0,$s4,$s1, merge_while_ij_lt_n1n2_fin
-	bge	$t1,$s5,$s3, merge_while_ij_lt_n1n2_fin
+	bge	$s4,$s1, merge_while_ij_lt_n1n2_fin
+	bge	$s5,$s3, merge_while_ij_lt_n1n2_fin
 	
 	
 #         if (v1[i] >= v2[j]) {
@@ -359,6 +359,10 @@ merge_if_v1_v2:
 	mov.d	$f12,$f4
 	syscall
 	
+	li	$v0,11
+	li	$a0, ' '
+	syscall
+	
 #             i++;
 	addi $s4,$s4,1
 	b	merge_if_v1_v2_fin
@@ -368,6 +372,10 @@ merge_if_v1_v2_else:
 #             std::cout << v2[j] << ' ';
 	li	$v0,3
 	mov.d	$f12,$f6
+	syscall
+	
+	li	$v0,11
+	li	$a0, ' '
 	syscall
 	
 #             j++;
@@ -443,28 +451,77 @@ return:
 	lw	$s3, 16($sp)
 	lw	$s4, 20($sp)
 	lw	$s5, 24($sp)
-	addi	$sp, $sp, 24
+	addi	$sp, $sp, 28
 	
 	jr	$ra
 # }
 merge__MARCAFIN:
 
 # int main(void) {
+main:
+
 #   std::cout << "\nPrograma de mezcla de vectores\n";
+	li	$v0,4
+	la	$a0,cad0
+	syscall
 
 #   printvec(v1,n1);
+	la	$a0,v1
+	lw	$a1,n1
+	jal	printvec
+
 #   printvec(v2,n2);
+	la	$a0,v2
+	lw	$a1,n2
+	jal	printvec
+	
 #   printvec(v3,n3);
+	la	$a0,v3
+	lw	$a1,n3
+	jal	printvec
 
 #   std::cout << "\nIntentando mezcla con dos vectores ...\n";
+	li	$v0,4
+	la	$a0,cad2
+	syscall
+
 #   merge(v1,n1,v2,n2);
+	la	$a0,v1
+	lw	$a1,n1
+	la	$a2,v2
+	lw	$a3,n2
+	jal	merge
 
 #   std::cout << "\nIntentando mezcla con dos vectores ...\n";
+	li	$v0,4
+	la	$a0,cad2
+	syscall
+	
 #   merge(v1,n1,v3,n3);
+	la	$a0,v1
+	lw	$a1,n1
+	la	$a2,v3
+	lw	$a3,n3
+	jal	merge
 
 #   std::cout << "\nIntentando mezcla con dos vectores ...\n";
+	li	$v0,4
+	la	$a0,cad2
+	syscall
+	
 #   merge(v2,n2,v3,n3);
+	la	$a0,v2
+	lw	$a1,n2
+	la	$a2,v3
+	lw	$a3,n3
+	jal	merge
 
 #   std::cout << "\nFIN DEL PROGRAMA\n";
+	li	$v0,4
+	la	$a0,cad3
+	syscall
+
 #   return 0;
+	li	$v0,10
+	syscall
 # }
