@@ -280,3 +280,42 @@ void GRAFO::AlgoritmoPrim() {
     cout << "\nCoste total del MST: " << coste_total << endl;
   }
 }
+
+
+void GRAFO::MostrarCamino(unsigned s, unsigned i, vector<unsigned> pred){
+  if(i != s){
+    MostrarCamino(s,pred[i],pred);
+    cout << " -> " << i + 1; 
+  } else {
+    cout << i + 1;
+  }
+}
+
+void GRAFO::TWOQ(){
+  deque<unsigned> dcola1, dcola2;
+  vector<int> d;
+  vector<unsigned> pred;
+  vector<bool> Encola;
+  unsigned s;
+
+  Encola.resize(n,false);
+  d.resize(n,maxint);
+  pred.resize(n,UERROR);
+
+  d[s] = 0;
+  pred[s] = s;
+
+  dcola2.push_back(s);
+  Encola[s] = true;
+  while(!dcola1.empty() || !dcola2.empty()){
+    unsigned k;
+    if(!dcola1.empty()){
+      k = dcola1.front();
+      dcola1.pop_front();
+    } else {
+      k = dcola2.front();
+      dcola2.pop_front();
+    }
+    Encola[k] = false;
+  }
+}
