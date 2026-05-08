@@ -34,6 +34,7 @@ void menu(unsigned dirigido, char& opcion)
     cout << "s. Mostrar la lista de [s]ucesores del grafo" << endl;
     cout << "p. Mostrar la lista de [p]redecesores del grafo" << endl;
     cout << "o. Mostrar c[o]mponentes fuertemente conexas del grafo" << endl;
+    cout << "m. Mostrar caminos [M]inimos" << endl;
   };
   cout << "q. Finalizar el programa" << endl;
   cout << "Introduce la letra de la accion a ejecutar  > ";
@@ -149,6 +150,13 @@ int main(int argc, char* argv[]) {
           clrscr();
           break;
 
+        case 'm':
+          clrscr();
+          cout << "Caminos mínimos del grafo: " << endl;
+          G.TWOQ();
+          pressanykey();
+          clrscr();
+          break;
       }
     } while (opcion != 'q');
   }

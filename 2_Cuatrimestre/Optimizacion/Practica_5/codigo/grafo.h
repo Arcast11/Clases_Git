@@ -88,9 +88,9 @@ class GRAFO {
   void AlgoritmoPrim();
   void AlgoritmoPrimoMaximo();
 
-   // Práctica 5
-  void GRAFO::TWOQ();
-  void GRAFO::MostrarCamino(unsigned s, unsigned i, vector<unsigned> pred);
+  // Práctica 5
+  void TWOQ();
+  void MostrarCamino(unsigned s, unsigned i, vector<unsigned> pred);
 
   ~GRAFO();  // Destructor del objeto grafo
 };

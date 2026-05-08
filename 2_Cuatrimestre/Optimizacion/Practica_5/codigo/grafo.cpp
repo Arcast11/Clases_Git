@@ -281,50 +281,50 @@ void GRAFO::AlgoritmoPrim() {
   }
 }
 
-
-void GRAFO::MostrarCamino(unsigned s, unsigned i, vector<unsigned> pred){
-  if(i != s){
-    MostrarCamino(s,pred[i],pred);
-    cout << " -> " << i + 1; 
+void GRAFO::MostrarCamino(unsigned s, unsigned i, vector<unsigned> pred) {
+  if (i != s) {
+    MostrarCamino(s, pred[i], pred);
+    cout << " -> " << i + 1;
   } else {
     cout << i + 1;
   }
 }
 
-void GRAFO::TWOQ(){
+void GRAFO::TWOQ() {
   deque<unsigned> dcola1, dcola2;
   vector<int> d;
   vector<unsigned> pred;
   vector<bool> Encola;
   unsigned s;
 
-  Encola.resize(n,false);
-  d.resize(n,maxint);
-  pred.resize(n,UERROR);
+  // 1. Inicialización
+  Encola.assign(n, false);
+  d.assign(n, maxint);
+  pred.assign(n, UERROR);
 
-  cout << "Nodo de partida [1 a " << n << "]: " << endl;
+  cout << "Nodo de partida [1 a " << n << "]: ";
   cin >> s;
-  s--;
+  s--;  // Ajuste a base 0
 
-  // Buscamos los costes negativos (menor coste Cmin)
-  int Cmin {0};
-  for(unsigned i{0}; i < n; i++){
-    for(unsigned k{0}; k < LS[i].size(); k++){
-      if(LS[i][k].c < Cmin){
-        Cmin = LS[i][k].c;
-      }
+  // 2. Pre-cálculo para circuitos negativos 
+  int Cmin = 0;
+  for (unsigned i = 0; i < n; i++) {
+    for (unsigned k = 0; k < LS[i].size(); k++) {
+      if (LS[i][k].c < Cmin) Cmin = LS[i][k].c;
+    }
   }
-  int limite_ciclo_negativo = n * Cmin;
-  
-  // Inicializamos S y lo añadimos s a la cola
+  int limite_ciclo_negativo = (n - 1) * Cmin;
+
+  // 3. Nodo inicial
   d[s] = 0;
   pred[s] = s;
   dcola2.push_back(s);
   Encola[s] = true;
 
-  while(!dcola1.empty() || !dcola2.empty()){
+  // 4. Bucle principal [cite: 298]
+  while (!dcola1.empty() || !dcola2.empty()) {
     unsigned k;
-    if(!dcola1.empty()){
+    if (!dcola1.empty()) {
       k = dcola1.front();
       dcola1.pop_front();
     } else {
@@ -332,32 +332,46 @@ void GRAFO::TWOQ(){
       dcola2.pop_front();
     }
     Encola[k] = false;
-    for(unsigned i{0}; i < LS[k].size(); i++){
+
+    for (unsigned i = 0; i < LS[k].size(); i++) {
       unsigned j = LS[k][i].j;
       int c_kj = LS[k][i].c;
 
-      if(d[j] > d[k] + c_kj){
-        bool nunca_en_cola = (d[j] == maxint);
-
+      // Condición de mejora (optimalidad) [cite: 252, 305]
+      if (d[j] > d[k] + c_kj) {
         d[j] = d[k] + c_kj;
-        pred[j] = k;
 
-        if(Cmin < 0 && d[j] <= limite_ciclo_negativo){
-          cout << "Existe al menos un circuito de coste negativo.";
+        // Detección de ciclo negativo
+        if (Cmin < 0 && d[j] < limite_ciclo_negativo) {
+          cout << "\nExiste al menos un circuito de coste negativo en el grafo."
+               << endl;
           return;
         }
-        if(!Encola[j]){
-          if(nunca_en_cola){
+
+        if (!Encola[j]) {
+          if (pred[j] == UERROR) {  // Nunca ha estado en cola
             dcola2.push_back(j);
-          } else {
+          } else {  // Ya estuvo, se cuela en Q1 
             dcola1.push_back(j);
           }
           Encola[j] = true;
         }
-        d[j] = d[k] + LS[i][j].c;
-        pred[j] = k;
+        pred[j] = k;  /
       }
     }
   }
-}
+
+  // Impresión de resultados 
+  cout << "\nSoluciones desde el nodo " << s + 1 << ":" << endl;
+  for (unsigned i = 0; i < n; i++) {
+    if (i == s) continue;
+
+    if (pred[i] != UERROR) {
+      cout << "Camino al nodo " << i + 1 << ": ";
+      MostrarCamino(s, i, pred);
+      cout << " | Coste: " << d[i] << endl;
+    } else {
+      cout << "No existe camino hacia el nodo " << i + 1 << endl;
+    }
+  }
 }
