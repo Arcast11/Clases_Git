@@ -306,7 +306,7 @@ void GRAFO::TWOQ() {
   cin >> s;
   s--;  // Ajuste a base 0
 
-  // 2. Pre-cálculo para circuitos negativos 
+  // 2. Pre-cálculo para circuitos negativos
   int Cmin = 0;
   for (unsigned i = 0; i < n; i++) {
     for (unsigned k = 0; k < LS[i].size(); k++) {
@@ -351,17 +351,17 @@ void GRAFO::TWOQ() {
         if (!Encola[j]) {
           if (pred[j] == UERROR) {  // Nunca ha estado en cola
             dcola2.push_back(j);
-          } else {  // Ya estuvo, se cuela en Q1 
+          } else {  // Ya estuvo, se cuela en Q1
             dcola1.push_back(j);
           }
           Encola[j] = true;
         }
-        pred[j] = k;  /
+        pred[j] = k;
       }
     }
   }
 
-  // Impresión de resultados 
+  // Impresión de resultados
   cout << "\nSoluciones desde el nodo " << s + 1 << ":" << endl;
   for (unsigned i = 0; i < n; i++) {
     if (i == s) continue;
