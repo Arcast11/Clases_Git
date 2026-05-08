@@ -302,11 +302,26 @@ void GRAFO::TWOQ(){
   d.resize(n,maxint);
   pred.resize(n,UERROR);
 
+  cout << "Nodo de partida [1 a " << n << "]: " << endl;
+  cin >> s;
+  s--;
+
+  // Buscamos los costes negativos (menor coste Cmin)
+  int Cmin {0};
+  for(unsigned i{0}; i < n; i++){
+    for(unsigned k{0}; k < LS[i].size(); k++){
+      if(LS[i][k].c < Cmin){
+        Cmin = LS[i][k].c;
+      }
+  }
+  int limite_ciclo_negativo = n * Cmin;
+  
+  // Inicializamos S y lo añadimos s a la cola
   d[s] = 0;
   pred[s] = s;
-
   dcola2.push_back(s);
   Encola[s] = true;
+
   while(!dcola1.empty() || !dcola2.empty()){
     unsigned k;
     if(!dcola1.empty()){
@@ -317,5 +332,32 @@ void GRAFO::TWOQ(){
       dcola2.pop_front();
     }
     Encola[k] = false;
+    for(unsigned i{0}; i < LS[k].size(); i++){
+      unsigned j = LS[k][i].j;
+      int c_kj = LS[k][i].c;
+
+      if(d[j] > d[k] + c_kj){
+        bool nunca_en_cola = (d[j] == maxint);
+
+        d[j] = d[k] + c_kj;
+        pred[j] = k;
+
+        if(Cmin < 0 && d[j] <= limite_ciclo_negativo){
+          cout << "Existe al menos un circuito de coste negativo.";
+          return;
+        }
+        if(!Encola[j]){
+          if(nunca_en_cola){
+            dcola2.push_back(j);
+          } else {
+            dcola1.push_back(j);
+          }
+          Encola[j] = true;
+        }
+        d[j] = d[k] + LS[i][j].c;
+        pred[j] = k;
+      }
+    }
   }
+}
 }
