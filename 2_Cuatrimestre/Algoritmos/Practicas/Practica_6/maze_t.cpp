@@ -104,24 +104,6 @@ bool maze_t::is_ok_(const int i, const int j) const {
   }
 }
 
-// AUXILIAR PARA COMPROBAR LA FASE III
-// sirve para poder imprimir las coordenadas como caracteres
-
-char direction_to_char(direction_t d) {
-  switch (d) {
-    case N:
-      return 'N';
-    case E:
-      return 'E';
-    case S:
-      return 'S';
-    case W:
-      return 'W';
-    default:
-      return '?';
-  }
-}
-
 // FASE II y FASE III
 // método recursivo que resuelve el laberinto
 bool maze_t::solve_(const int i, const int j) {
@@ -156,10 +138,28 @@ bool maze_t::solve_(const int i, const int j) {
   return false;
 }
 
+// AUXILIAR PARA COMPROBAR LA FASE III
+// sirve para poder imprimir las coordenadas como caracteres
+
+char direction_to_char(direction_t d) {
+  switch (d) {
+    case N:
+      return 'N';
+    case E:
+      return 'E';
+    case S:
+      return 'S';
+    case W:
+      return 'W';
+    default:
+      return '?';
+  }
+}
+
 // Comprobación FASE III
 // mostramos el camino por pantalla
 void maze_t::write_path(ostream& os) {
-  os << "Camino cardinal: ";
+  os << "Camino: ";
   if (path_stack_.empty()) {
     os << "No hay camino guardado.";
   } else {
