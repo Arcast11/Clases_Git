@@ -80,6 +80,9 @@ ostream& maze_t::write(ostream& os) const {
         case PATH_ID:
           os << PATH_CHR;
           break;
+        case DEADEND_ID:
+          os << DEADEND_CHAR;
+          break;
       }
     os << endl;
   }
@@ -120,6 +123,10 @@ bool maze_t::solve_(const int i, const int j) {
   for (size_t k = 0; k <= 3; k++) {
     int next_i = i_d[k] + i;
     int next_j = j_d[k] + j;
+
+    if (k == 3) {
+      matrix_(i, j) = DEADEND_ID;
+    }
 
     if (is_ok_(next_i, next_j)) {
       bool solved = solve_(next_i, next_j);

@@ -27,6 +27,8 @@
 #define START_ID 8
 // indica la salida del laberinto
 #define END_ID 9
+// callejon sin salida
+#define DEADEND_ID 3
 
 // caracteres usados para mostrar el laberinto por pantalla
 #define WALL_CHR "█"
@@ -34,6 +36,7 @@
 #define PATH_CHR "·"
 #define START_CHR "A"
 #define END_CHR "B"
+#define DEADEND_CHAR "X"
 
 using namespace std;
 using namespace AED;
