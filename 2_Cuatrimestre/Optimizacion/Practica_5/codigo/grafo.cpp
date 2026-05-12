@@ -321,7 +321,7 @@ void GRAFO::TWOQ() {
   dcola2.push_back(s);
   Encola[s] = true;
 
-  // 4. Bucle principal [cite: 298]
+  // 4. Bucle principal 
   while (!dcola1.empty() || !dcola2.empty()) {
     unsigned k;
     if (!dcola1.empty()) {
@@ -337,7 +337,7 @@ void GRAFO::TWOQ() {
       unsigned j = LS[k][i].j;
       int c_kj = LS[k][i].c;
 
-      // Condición de mejora (optimalidad) [cite: 252, 305]
+      // Condición de mejora (optimalidad) 
       if (d[j] > d[k] + c_kj) {
         d[j] = d[k] + c_kj;
 
