@@ -14,8 +14,6 @@
 #include <cassert>
 #include <iostream>
 
-#include "rational_t.hpp"
-
 using namespace std;
 
 template <class T>

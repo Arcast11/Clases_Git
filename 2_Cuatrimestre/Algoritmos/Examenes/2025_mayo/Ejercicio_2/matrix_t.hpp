@@ -41,6 +41,10 @@ class matrix_t {
   void write(ostream& = cout) const;
   void read(istream& = cin);
 
+  // Ejercicio de Examen
+  T sum_row(const matrix_t<T>& A, int i, int j, int n);
+  T sum_submatrix(const matrix_t<T>& A, int i, int j, int n);
+
  private:
   int m_, n_;  // m_ filas y n_ columnas
   vector_t<T> v_;
@@ -125,3 +129,21 @@ inline int matrix_t<T>::pos(const int i, const int j) const {
   return (i - 1) * get_n() + (j - 1);
 }
 
+template <class T>
+T matrix_t<T>::sum_row(const matrix_t<T>& A, int i, int j, int n) {
+  // Caso base
+  if (n == 0) return 0;
+
+  // Sumamos cada elemento de la submatriz, y disminuimos n hasta llegar a la
+  // base
+  return A.at(i, j) + sum_submatrix(a, i + 1, j, n - 1)
+}
+
+template <class T>
+T matrix_t<T>::sum_submatrix(const matrix_t<T>& A, int i, int j, int n) {
+  // Caso base
+  if (n == 0) return;
+
+  // Sumamos el valor dado en una columna, con las siguientes columnas
+  return sum_row(A, i, j, n) + sum_submatrix(A, i, j + 1, n - 1);
+}
