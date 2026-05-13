@@ -296,6 +296,7 @@ void GRAFO::TWOQ() {
   vector<unsigned> pred;
   vector<bool> Encola;
   unsigned s;
+  bool ciclo_negativo = false;
 
   // 1. Inicialización
   Encola.assign(n, false);
@@ -321,8 +322,8 @@ void GRAFO::TWOQ() {
   dcola2.push_back(s);
   Encola[s] = true;
 
-  // 4. Bucle principal 
-  while (!dcola1.empty() || !dcola2.empty()) {
+  // 4. Bucle principal
+  while ((!dcola1.empty() || !dcola2.empty()) && !ciclo_negativo) {
     unsigned k;
     if (!dcola1.empty()) {
       k = dcola1.front();
@@ -337,18 +338,16 @@ void GRAFO::TWOQ() {
       unsigned j = LS[k][i].j;
       int c_kj = LS[k][i].c;
 
-      // Condición de mejora (optimalidad) 
+      // Condición de mejora (optimalidad)
       if (d[j] > d[k] + c_kj) {
         d[j] = d[k] + c_kj;
 
         // Detección de ciclo negativo
         if (Cmin < 0 && d[j] < limite_ciclo_negativo) {
-          cout << "\nExiste al menos un circuito de coste negativo en el grafo."
-               << endl;
-          return;
+          ciclo_negativo = true;
         }
 
-        if (!Encola[j]) {
+        if (!Encola[j] && !ciclo_negativo) {
           if (pred[j] == UERROR) {  // Nunca ha estado en cola
             dcola2.push_back(j);
           } else {  // Ya estuvo, se cuela en Q1
@@ -362,16 +361,19 @@ void GRAFO::TWOQ() {
   }
 
   // Impresión de resultados
-  cout << "\nSoluciones desde el nodo " << s + 1 << ":" << endl;
-  for (unsigned i = 0; i < n; i++) {
-    if (i == s) continue;
-
-    if (pred[i] != UERROR) {
-      cout << "Camino al nodo " << i + 1 << ": ";
-      MostrarCamino(s, i, pred);
-      cout << " | Coste: " << d[i] << endl;
-    } else {
-      cout << "No existe camino hacia el nodo " << i + 1 << endl;
+  if (ciclo_negativo) {
+    cout << "\nexiste al menos un circuito de coste negativo en el grafo"
+         << endl;
+  } else {
+    cout << "\nSoluciones desde el nodo " << s + 1 << ":" << endl;
+    for (unsigned i = 0; i < n; i++) {
+      if (pred[i] != UERROR) {
+        cout << "Camino al nodo " << i + 1 << ": ";
+        MostrarCamino(s, i, pred);
+        cout << " | Coste: " << d[i] << endl;
+      } else {
+        cout << "No existe camino hacia el nodo " << i + 1 << endl;
+      }
     }
   }
 }
