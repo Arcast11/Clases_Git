@@ -1,31 +1,30 @@
-/** AUTOR: Armando Castro
- * FECHA: 10/10/2023
- * EMAIL: armando.castro@ull.edu.es
- * VERSION: 3.1
+/* AUTOR: Armando Castro
+ * FECHA: 10/03/2026
+ * EMAIL: armando.castro.31@ull.edu.es
+ * VERSION: 1.0
  * ASIGNATURA: Algoritmos y Estructuras de Datos
- * PRÁCTICA Nº: 3
- * ESTILO: Google C++ Style Guide
- * COMENTARIOS:
+ * PRÁCTICA Nº: 2
+ * COMENTARIOS: se indican entre [] las pautas de estilo aplicadas de
+ *              "C++ Programming Style Guidelines"
+ *              https://geosoft.no/development/cppstyle.html
  */
 
-#ifndef VECTORT_H_
-#define VECTORT_H_
+#pragma once
 
 #include <cassert>
 #include <iostream>
 
+#include "rational_t.hpp"
+
+using namespace std;
+
 template <class T>
 class vector_t {
  public:
-  // constructores
   vector_t(const int = 0);
-  vector_t(const vector_t&);  // constructor de copia
-
-  // operador de asignación
-  vector_t<T>& operator=(const vector_t<T>&);
-
-  // destructor
   ~vector_t();
+
+  void resize(const int);
 
   // getters
   T get_val(const int) const;
@@ -42,12 +41,11 @@ class vector_t {
   const T& at(const int) const;
   const T& operator[](const int) const;
 
-  // Redimensionado
-  void resize(const int);
+  // Modificacion clase
+  // rational_t max(const vector_t<rational_t>&);
 
-  // E/S
-  void read(std::istream& = std::cin);
-  void write(std::ostream& = std::cout) const;
+  void write(ostream& = cout) const;
+  void read(istream& = cin);
 
  private:
   T* v_;
@@ -58,23 +56,9 @@ class vector_t {
 };
 
 template <class T>
-vector_t<T>::vector_t(const int n) : v_(NULL), sz_(n) {
+vector_t<T>::vector_t(const int n) {
+  sz_ = n;
   build();
-}
-
-// constructor de copia
-template <class T>
-vector_t<T>::vector_t(const vector_t<T>& w) : v_(NULL), sz_(0) {
-  *this = w;  // se invoca directamente al operator=
-}
-
-// operador de asignación
-template <class T>
-vector_t<T>& vector_t<T>::operator=(const vector_t<T>& w) {
-  resize(w.get_size());
-  for (int i = 0; i < get_size(); i++) at(i) = w.at(i);
-
-  return *this;
 }
 
 template <class T>
@@ -147,30 +131,15 @@ const T& vector_t<T>::operator[](const int i) const {
 }
 
 template <class T>
-void vector_t<T>::read(std::istream& is) {
+void vector_t<T>::write(ostream& os) const {
+  os << get_size() << ":\t";
+  for (int i = 0; i < get_size(); i++) os << at(i) << "\t";
+  os << endl;
+}
+
+template <class T>
+void vector_t<T>::read(istream& is) {
   is >> sz_;
   resize(sz_);
-  for (int i = 0; i < sz_; i++) is >> at(i);
+  for (int i = 0; i < sz_; ++i) is >> at(i);
 }
-
-template <class T>
-void vector_t<T>::write(std::ostream& os) const {
-  os << get_size() << ": [ ";
-  for (int i = 0; i < get_size(); i++)
-    os << at(i) << (i != get_size() - 1 ? "\t" : "");
-  os << " ]" << std::endl;
-}
-
-template <class T>
-std::istream& operator>>(std::istream& is, vector_t<T>& v) {
-  v.read(is);
-  return is;
-}
-
-template <class T>
-std::ostream& operator<<(std::ostream& os, const vector_t<T>& v) {
-  v.write(os);
-  return os;
-}
-
-#endif  // VECTORT_H_
