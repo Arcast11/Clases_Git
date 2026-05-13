@@ -377,3 +377,85 @@ void GRAFO::TWOQ() {
     }
   }
 }
+
+void GRAFO::BFM() {
+  deque<unsigned> dcola1;
+  vector<int> d;
+  vector<unsigned> pred;
+  vector<bool> Encola;
+  unsigned s;
+  bool ciclo_negativo = false;
+
+  // 1. Inicialización
+  Encola.assign(n, false);
+  d.assign(n, maxint);
+  pred.assign(n, UERROR);
+
+  cout << "Nodo de partida [1 a " << n << "]: ";
+  cin >> s;
+  s--;  // Ajuste a base 0
+
+  // 2. Pre-cálculo para circuitos negativos
+  int Cmin = 0;
+  for (unsigned i = 0; i < n; i++) {
+    for (unsigned k = 0; k < LS[i].size(); k++) {
+      if (LS[i][k].c < Cmin) Cmin = LS[i][k].c;
+    }
+  }
+  int limite_ciclo_negativo = (n - 1) * Cmin;
+
+  // 3. Nodo inicial
+  d[s] = 0;
+  pred[s] = s;
+  dcola1.push_back(s);
+  Encola[s] = true;
+
+  // 4. Bucle principal
+  while (!dcola1.empty() && !ciclo_negativo) {
+    unsigned k;
+    if (!dcola1.empty()) {
+      k = dcola1.front();
+      dcola1.pop_front();
+    }
+    Encola[k] = false;
+
+    for (unsigned i = 0; i < LS[k].size(); i++) {
+      unsigned j = LS[k][i].j;
+      int c_kj = LS[k][i].c;
+
+      // Condición de mejora (optimalidad)
+      if (d[j] > d[k] + c_kj) {
+        d[j] = d[k] + c_kj;
+
+        // Detección de ciclo negativo
+        if (Cmin < 0 && d[j] < limite_ciclo_negativo) {
+          ciclo_negativo = true;
+        }
+
+        if (!Encola[j] && !ciclo_negativo) {
+            dcola1.push_back(j);
+        
+          Encola[j] = true;
+        }
+        pred[j] = k;
+      }
+    }
+  }
+
+  // Impresión de resultados
+  if (ciclo_negativo) {
+    cout << "\nexiste al menos un circuito de coste negativo en el grafo"
+         << endl;
+  } else {
+    cout << "\nSoluciones desde el nodo " << s + 1 << ":" << endl;
+    for (unsigned i = 0; i < n; i++) {
+      if (pred[i] != UERROR) {
+        cout << "Camino al nodo " << i + 1 << ": ";
+        MostrarCamino(s, i, pred);
+        cout << " | Coste: " << d[i] << endl;
+      } else {
+        cout << "No existe camino hacia el nodo " << i + 1 << endl;
+      }
+    }
+  }
+}

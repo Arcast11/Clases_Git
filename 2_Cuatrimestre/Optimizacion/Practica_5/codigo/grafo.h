@@ -91,6 +91,7 @@ class GRAFO {
   // Práctica 5
   void TWOQ();
   void MostrarCamino(unsigned s, unsigned i, vector<unsigned> pred);
+  void BFM();
 
   ~GRAFO();  // Destructor del objeto grafo
 };
