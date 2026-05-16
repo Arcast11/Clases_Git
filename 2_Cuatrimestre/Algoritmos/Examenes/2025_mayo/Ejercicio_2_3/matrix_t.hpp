@@ -42,8 +42,9 @@ class matrix_t {
   void read(istream& = cin);
 
   // Ejercicio de Examen
-  T sum_row(const matrix_t<T>& A, int i, int j, int n);
-  T sum_submatrix(const matrix_t<T>& A, int i, int j, int n);
+  int sum_row(const matrix_t<T>& A, int i, int j, int n);
+  int sum_submatrix(const matrix_t<T>& A, int i, int j, int n);
+  int sum_submatrix_iterative(const matrix_t<T>& A, int i, int j, int n);
 
  private:
   int m_, n_;  // m_ filas y n_ columnas
@@ -130,20 +131,28 @@ inline int matrix_t<T>::pos(const int i, const int j) const {
 }
 
 template <class T>
-T matrix_t<T>::sum_row(const matrix_t<T>& A, int i, int j, int n) {
-  // Caso base
+int matrix_t<T>::sum_row(const matrix_t<T>& A, int i, int j, int n) {
+  // Código exacto del profesor adaptado a plantillas
   if (n == 0) return 0;
-
-  // Sumamos cada elemento de la submatriz, y disminuimos n hasta llegar a la
-  // base
-  return A.at(i, j) + sum_submatrix(a, i + 1, j, n - 1)
+  return A.at(i, j) + sum_row(A, i, j + 1, n - 1);
 }
 
 template <class T>
-T matrix_t<T>::sum_submatrix(const matrix_t<T>& A, int i, int j, int n) {
-  // Caso base
-  if (n == 0) return;
+int matrix_t<T>::sum_submatrix(const matrix_t<T>& A, int i, int j, int n) {
+  // Código exacto del profesor adaptado a plantillas
+  if (n == 0) return 0;
 
-  // Sumamos el valor dado en una columna, con las siguientes columnas
-  return sum_row(A, i, j, n) + sum_submatrix(A, i, j + 1, n - 1);
+  return sum_row(A, i, j, n) + sum_submatrix(A, i + 1, j, n - 1);
+}
+
+template <class T>
+int matrix_t<T>::sum_submatrix_iterative(const matrix_t<T>& A, int i, int j,
+                                         int n) {
+  int sum = 0;
+  for (size_t row = 0; row < n; row++) {
+    for (size_t col = 0; col < n; col++) {
+      sum += A.at(row + i, col + j);
+    }
+  }
+  return sum;
 }
