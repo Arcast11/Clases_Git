@@ -42,8 +42,6 @@ class vector_t {
   void write(ostream& = cout) const;
   void read(istream& = cin);
 
-  // Examen
-  
 
  private:
   T* v_;
@@ -141,3 +139,4 @@ void vector_t<T>::read(istream& is) {
   resize(sz_);
   for (int i = 0; i < sz_; ++i) is >> at(i);
 }
+

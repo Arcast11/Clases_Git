@@ -1,11 +1,11 @@
-// AUTOR:
-// FECHA:
-// EMAIL:
+// AUTOR: 
+// FECHA: 
+// EMAIL: 
 // VERSION: 2.0
 // ASIGNATURA: Algoritmos y Estructuras de Datos
 // TEMA: 4
 // ESTILO: Google C++ Style Guide
-// COMENTARIOS:
+// COMENTARIOS: 
 
 #ifndef DLL_NODET_H_
 #define DLL_NODET_H_
@@ -13,8 +13,7 @@
 #include <iostream>
 
 // Clase para nodos de listas doblemente enlazadas
-template <class T>
-class dll_node_t {
+template <class T> class dll_node_t {
  public:
   // constructores
   dll_node_t() : prev_(NULL), data_(), next_(NULL) {}  // por defecto
@@ -26,10 +25,10 @@ class dll_node_t {
   // getters & setters
   dll_node_t<T>* get_next(void) const { return next_; }
   void set_next(dll_node_t<T>* next) { next_ = next; }
-
+  
   dll_node_t<T>* get_prev(void) const { return prev_; }
   void set_prev(dll_node_t<T>* prev) { prev_ = prev; }
-
+  
   const T& get_data(void) const { return data_; }
   void set_data(const T& data) { data_ = data; }
 
@@ -42,9 +41,9 @@ class dll_node_t {
   dll_node_t<T>* next_;
 };
 
+  
 // E/S
-template <class T>
-std::ostream& dll_node_t<T>::write(std::ostream& os) const {
+template <class T> std::ostream& dll_node_t<T>::write(std::ostream& os) const {
   os << data_;
   return os;
 }
