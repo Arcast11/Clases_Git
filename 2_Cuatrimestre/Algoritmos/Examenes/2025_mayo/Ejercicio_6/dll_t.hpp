@@ -1,28 +1,30 @@
-// AUTOR: 
-// FECHA: 
-// EMAIL: 
+// AUTOR:
+// FECHA:
+// EMAIL:
 // VERSION: 2.0
 // ASIGNATURA: Algoritmos y Estructuras de Datos
 // TEMA: 4
 // ESTILO: Google C++ Style Guide
-// COMENTARIOS: 
+// COMENTARIOS:
 
 #ifndef DLLT_H_
 #define DLLT_H_
 
 #include <cassert>
+#include <cmath>
 #include <iostream>
 
-#include "dll_node_t.h"
+#include "dll_node_t.hpp"
 
 // Clase para almacenar una lista doblemente enlazada
-template <class T> class dll_t {
+template <class T>
+class dll_t {
  public:
   // constructor
   dll_t(void) : head_(NULL), tail_(NULL), sz_(0) {}
 
   // destructor
-  ~dll_t(void); 
+  ~dll_t(void);
 
   // getters
   dll_node_t<T>* get_tail(void) const { return tail_; }
@@ -40,18 +42,21 @@ template <class T> class dll_t {
 
   dll_node_t<T>* erase(dll_node_t<T>*);
 
+  // Examen
+  int multiply(const dll_t<int>&);
+
   // E/S
   std::ostream& write(std::ostream& = std::cout) const;
 
  private:
   dll_node_t<T>* head_;
   dll_node_t<T>* tail_;
-  int            sz_;
+  int sz_;
 };
 
-
 // destructor
-template <class T> dll_t<T>::~dll_t(void) {
+template <class T>
+dll_t<T>::~dll_t(void) {
   while (head_ != NULL) {
     dll_node_t<T>* aux = head_;
     head_ = head_->get_next();
@@ -62,7 +67,8 @@ template <class T> dll_t<T>::~dll_t(void) {
 }
 
 // Comprobar si lista vacía
-template <class T> bool dll_t<T>::empty(void) const {
+template <class T>
+bool dll_t<T>::empty(void) const {
   if (head_ == NULL) {
     assert(tail_ == NULL);
     assert(sz_ == 0);
@@ -72,7 +78,8 @@ template <class T> bool dll_t<T>::empty(void) const {
 }
 
 // operaciones
-template <class T> void dll_t<T>::push_front(dll_node_t<T>* nodo) {
+template <class T>
+void dll_t<T>::push_front(dll_node_t<T>* nodo) {
   assert(nodo != NULL);
 
   if (empty()) {
@@ -86,7 +93,8 @@ template <class T> void dll_t<T>::push_front(dll_node_t<T>* nodo) {
   sz_++;
 }
 
-template <class T> void dll_t<T>::push_back(dll_node_t<T>* nodo) {
+template <class T>
+void dll_t<T>::push_back(dll_node_t<T>* nodo) {
   assert(nodo != NULL);
 
   if (empty()) {
@@ -100,7 +108,8 @@ template <class T> void dll_t<T>::push_back(dll_node_t<T>* nodo) {
   sz_++;
 }
 
-template <class T> dll_node_t<T>* dll_t<T>::pop_back(void) {
+template <class T>
+dll_node_t<T>* dll_t<T>::pop_back(void) {
   assert(!empty());
 
   dll_node_t<T>* aux = tail_;
@@ -115,7 +124,8 @@ template <class T> dll_node_t<T>* dll_t<T>::pop_back(void) {
   return aux;
 }
 
-template <class T> dll_node_t<T>* dll_t<T>::pop_front(void) {
+template <class T>
+dll_node_t<T>* dll_t<T>::pop_front(void) {
   assert(!empty());
 
   dll_node_t<T>* aux = head_;
@@ -130,7 +140,8 @@ template <class T> dll_node_t<T>* dll_t<T>::pop_front(void) {
   return aux;
 }
 
-template <class T> dll_node_t<T>* dll_t<T>::erase(dll_node_t<T>* nodo) {
+template <class T>
+dll_node_t<T>* dll_t<T>::erase(dll_node_t<T>* nodo) {
   assert(nodo != NULL);
 
   if (nodo->get_prev() != NULL)
@@ -148,7 +159,8 @@ template <class T> dll_node_t<T>* dll_t<T>::erase(dll_node_t<T>* nodo) {
 }
 
 // E/S
-template <class T> std::ostream& dll_t<T>::write(std::ostream& os) const {
+template <class T>
+std::ostream& dll_t<T>::write(std::ostream& os) const {
   dll_node_t<T>* aux = head_;
 
   while (aux != NULL) {
@@ -156,6 +168,22 @@ template <class T> std::ostream& dll_t<T>::write(std::ostream& os) const {
     aux = aux->get_next();
   }
   return os;
+}
+
+// Examen
+template <>
+int dll_t<int>::multiply(const dll_t<int>& B) {
+  int value_A = 0, expo = 0;
+  for (dll_node_t<int>* ptr = get_tail(); ptr != NULL; ptr = ptr->get_prev()) {
+    value_A += ptr->get_data() * pow(10, expo++);
+  }
+  expo = 0;
+  int result = 0;
+  for (dll_node_t<int>* ptr = B.get_tail(); ptr != NULL;
+       ptr = ptr->get_prev()) {
+    result += ptr->get_data() * pow(10, expo++) * value_A;
+  }
+  return result;
 }
 
 #endif  // DLLT_H_
